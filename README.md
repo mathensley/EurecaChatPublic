@@ -5,6 +5,8 @@
 Esta é a **V2 do EurecaChat**, atualizada para as novas versões do LangChain e
 LangGraph e com uma nova interface desenvolvida em React/Next.js.
 
+> **Versão pública desatualizada:** este repositório é um snapshot público do código e pode estar atrás da versão em desenvolvimento. Para experimentar a aplicação, acesse o [deploy público de teste](https://eureca-chat.teste.sti.ufcg.edu.br/). Os dados acadêmicos são consultados na [API Eureca](https://eureca.sti.ufcg.edu.br/).
+
 ---
 ## 🏛️ Arquitetura
 
@@ -20,15 +22,20 @@ sem executar o agente.
 | `CheckUserMessage` | Atua como guardrail de entrada. Classifica a mensagem, remove conteúdo interno de validação e decide entre encerrar o fluxo com uma resposta segura ou encaminhá-lo ao agente. |
 | `AgentNode` | Executa o agente especializado do EurecaChat, responsável por interpretar a solicitação, chamar ferramentas e produzir a resposta final. |
 | Ferramentas | Consultam informações acadêmicas sobre cursos, currículos, disciplinas, turmas, horários, calendários, setores, estudantes, professores e o portal da UFCG. |
+| Dados: API e Text2SQL | Algumas ferramentas consultam endpoints da API Eureca diretamente; outras transformam perguntas em SQL e consultam uma base SQLite local, formada com dados baixados e atualizados da API. |
 | Middlewares | Adicionam contexto, filtram ferramentas conforme o perfil do usuário, tratam erros, registram a execução e resumem conversas longas. |
 | Memória e persistência | O `AsyncPostgresSaver` mantém os checkpoints do LangGraph por `thread_id`. Para usuários autenticados, o `thread_id` corresponde ao chat salvo; sessões anônimas têm seus checkpoints removidos ao desconectar. |
 | API e tempo real | O Quart disponibiliza autenticação e histórico por HTTP, enquanto o Socket.IO transmite status, tokens e a resposta final. |
 | Frontend | A aplicação React/Next.js é exportada como site estático, servida pelo Quart e integrada às APIs e ao Socket.IO. |
 
+### Base local para Text2SQL
+
+O Text2SQL usa o banco consolidado `ufcg.sqlite` como fonte de dados. Para executar a aplicação localmente, é preciso primeiro rodar os scripts de download dos dados da API e de consolidação em [`src/tools/eureca/scripts_consolidacao_bd/`](src/tools/eureca/scripts_consolidacao_bd/). Eles criam a base intermediária usada nas consultas SQL; ela deve estar disponível como `ufcg.sqlite` no diretório definido por `SQLITE_DIR` (no Docker, `/EurecaAI/sqlite`). No snapshot público, a lista `SCRIPTS` de `main.py` está vazia; executar apenas esse arquivo não faz os downloads. Atualize essa base quando precisar de dados mais recentes. As consultas diretas aos endpoints da API continuam sendo usadas pelas demais ferramentas.
+
 ---
 ## 🚀 Instalação e deploy
 
-Para instalar basta executar o código abaixo:
+Depois de preparar `ufcg.sqlite` conforme a seção anterior e disponibilizá-lo no diretório `SQLITE_DIR` da aplicação (no Docker, no volume montado em `/EurecaAI/sqlite`), inicie os serviços com:
 
 ```
 docker compose up -d --build
