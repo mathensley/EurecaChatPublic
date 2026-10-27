@@ -1,0 +1,34 @@
+SIGLAS = {
+    "disciplina": {
+        "EDA": "estrutura de dados e algoritmos",
+        "LEDA": "laboratório de estrutura de dados e algoritmos",
+        "P2": "programação 2",
+        "LP2": "laboratório de programação 2",
+        "FMCC2": "fundamentos de matemática para ciência da computação 2",
+        "FMCC1": "fundamentos de matemática para ciência da computação 1",
+        "P1": "programação 1",
+        "LP1": "laboratório de programação 1",
+        "PLP": "paradigmas de linguagens de programação",
+        "AA": "algoritimos avançados",
+        "TC": "teoria da computação",
+        "GRAFOS": "teoria dos grafos",
+        "OAC": "organização e arquitetura de computadores",
+        "LOAC": "laboratório de organização e arquitetura de computadores",
+        "BD": "banco de dados",
+        "TD": "transformação digital",
+        "SO": "sistemas operacionais",
+        "PSOFT": "projeto de sotfware",
+        "PROGWEB": "programação para web",
+        "PLN": "processamento de linguagem natural",
+        "IC": "introduçao à computação",
+        "IA": "inteligência artificial",
+        "ES": "engenharia de software",
+        "ATAL": "análise e técnica de algoritmos",
+        "C1": "cálculo 1",
+        "C2": "cálculo 2"
+    },
+    "curso": {
+        "CC": "ciência da computação",
+        "ECONOMIA": "ciências econômicas"
+    }   
+}

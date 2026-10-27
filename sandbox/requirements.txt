@@ -1,0 +1,5 @@
+matplotlib==3.11.1
+pandas==3.0.3
+reportlab==5.0.1
+pillow==12.3.0
+pymupdf==1.27.2.3

@@ -1,0 +1,798 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Tutorial Eureca Chat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: caderno quadriculado no topo, bancada de duas colunas (casos e passos / chat simulado) e roteiro em linha do tempo. */
+:root {
+  --paper: #F2F5F7;
+  --surface: #FFFFFF;
+  --ink: #13212B;
+  --ink-2: #4A5B68;
+  --line: #D5DDE3;
+  --grid: rgba(19, 33, 43, 0.07);
+  --bulb: #F4B400;
+  --on-bulb: #241A00;
+  --bar: #F2F5F7;
+  --pub: #0B7473;
+  --pub-bg: #DCF0EF;
+  --prof: #B8400A;
+  --prof-bg: #FBE4D6;
+  --alu: #2547B8;
+  --alu-bg: #E0E7FB;
+  --on-acc: #FFFFFF;
+  --ok: #1B7F4B;
+  --ok-bg: #DDF3E6;
+  --no: #8A5A5A;
+  --no-bg: #F3E6E6;
+  --f-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0D171E; --surface: #14222C; --ink: #E8EFF3; --ink-2: #9FB1BD; --line: #27394A;
+    --grid: rgba(255, 255, 255, 0.05); --bar: #0D171E;
+    --pub: #4CC9C6; --pub-bg: #123A3B; --prof: #FF9A62; --prof-bg: #43251A; --alu: #8CA6FF; --alu-bg: #1C2850;
+    --on-acc: #0D171E; --ok: #62D194; --ok-bg: #143324; --no: #D2A5A5; --no-bg: #3A2323;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0D171E; --surface: #14222C; --ink: #E8EFF3; --ink-2: #9FB1BD; --line: #27394A;
+  --grid: rgba(255, 255, 255, 0.05); --bar: #0D171E;
+  --pub: #4CC9C6; --pub-bg: #123A3B; --prof: #FF9A62; --prof-bg: #43251A; --alu: #8CA6FF; --alu-bg: #1C2850;
+  --on-acc: #0D171E; --ok: #62D194; --ok-bg: #143324; --no: #D2A5A5; --no-bg: #3A2323;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bar); }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.1; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--bulb); outline-offset: 2px; }
+
+[data-p="publico"], [data-role="visitante"] { --acc: var(--pub); --acc-bg: var(--pub-bg); }
+[data-p="professor"], [data-role="prof"] { --acc: var(--prof); --acc-bg: var(--prof-bg); }
+[data-p="aluno"], [data-role="aluno"] { --acc: var(--alu); --acc-bg: var(--alu-bg); }
+
+.in { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* barra */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bar); border-bottom: 1px solid var(--line); }
+.bar .in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 16px; padding-block: 10px; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+.bulb { width: 14px; height: 14px; border-radius: 50%; background: var(--bulb); box-shadow: 0 0 0 4px color-mix(in srgb, var(--bulb) 28%, transparent); }
+.bar nav { display: flex; gap: 16px; font-size: 0.9rem; }
+.bar nav a { color: var(--ink-2); text-decoration: none; padding-block: 4px; }
+.bar nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+
+/* hero */
+.hero { position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 28px 28px; -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); pointer-events: none; }
+.hero .in { position: relative; padding-block: 48px 36px; }
+.kicker { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.hero h1 { font-weight: 800; font-size: clamp(2.3rem, 7vw, 4rem); margin-top: 12px; max-width: 16ch; }
+.mark { position: relative; display: inline-block; }
+.mark::after { content: ""; position: absolute; left: -2%; right: -2%; bottom: -0.04em; height: 0.16em; background: var(--bulb); border-radius: 3px; transform: rotate(-1.2deg); }
+.lede { margin-top: 18px; max-width: 58ch; color: var(--ink-2); font-size: 1.08rem; }
+.tiles { margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+.tile { text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 6px; min-width: 0; }
+.tile:hover { border-color: var(--acc); }
+.tile[aria-pressed="true"] { border-color: var(--acc); background: var(--acc-bg); }
+.tile .who { display: flex; align-items: center; gap: 8px; font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.tile .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--acc); flex: none; }
+.tile strong { font-family: var(--f-display); font-size: 1.5rem; line-height: 1.1; color: var(--acc); }
+.tile span.d { color: var(--ink-2); font-size: 0.92rem; }
+.tile .n { font-family: var(--f-mono); font-size: 0.75rem; color: var(--ink-2); }
+
+/* secoes */
+section.block { padding-block: 44px; scroll-margin-top: 64px; }
+section.block + section.block { border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 8px; margin-bottom: 24px; max-width: 62ch; }
+.sec-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; }
+.sec-head p { color: var(--ink-2); }
+
+/* bancada */
+.bench { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+@media (min-width: 900px) { .bench { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 36px; } .sim { position: sticky; top: 76px; align-self: start; } }
+.col { display: grid; gap: 24px; min-width: 0; align-content: start; }
+.label { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 8px; display: block; }
+.cases { display: grid; gap: 8px; }
+.case { text-align: left; background: var(--surface); border: 1.5px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 2px; }
+.case:hover { border-color: var(--acc); }
+.case[aria-pressed="true"] { border-color: var(--acc); background: var(--acc-bg); }
+.case b { font-weight: 600; }
+.case span { color: var(--ink-2); font-size: 0.9rem; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.step { width: 100%; text-align: left; background: none; border: 0; border-radius: 8px; padding: 10px 8px; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
+.step:hover { background: color-mix(in srgb, var(--acc) 8%, transparent); }
+.step .num { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-2); }
+.step[data-state="done"] .num { background: var(--acc-bg); border-color: var(--acc); color: var(--acc); }
+.step[data-state="active"] .num { background: var(--acc); border-color: var(--acc); color: var(--on-acc); }
+.step .tt { font-weight: 600; padding-top: 3px; }
+.step[data-state="todo"] .tt { color: var(--ink-2); font-weight: 500; }
+.step .more { display: grid; gap: 8px; margin-top: 6px; font-size: 0.95rem; color: var(--ink-2); }
+.onde { font-family: var(--f-mono); font-size: 0.78rem; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; color: var(--ink); width: fit-content; max-width: 100%; overflow-wrap: anywhere; }
+
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1.5px solid var(--line); background: var(--surface); border-radius: 8px; padding: 9px 16px; font-weight: 500; font-size: 0.95rem; }
+.btn:hover:not(:disabled) { border-color: var(--ink-2); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.primary { background: var(--acc, var(--ink)); border-color: var(--acc, var(--ink)); color: var(--on-acc); font-weight: 600; }
+
+/* chat simulado */
+.chat { background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.chat-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.chat-head .ch { font-family: var(--f-mono); font-weight: 500; font-size: 0.95rem; overflow-wrap: anywhere; }
+.chat-head .ctx { font-size: 0.8rem; color: var(--ink-2); }
+.tag { font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; background: var(--bulb); color: var(--on-bulb); border-radius: 4px; padding: 2px 7px; }
+.chat-body { height: 440px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; background-image: linear-gradient(var(--grid) 1px, transparent 1px); background-size: 100% 28px; }
+.msg { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; animation: rise 0.25s ease-out both; }
+.av { width: 34px; height: 34px; border-radius: 50%; background: var(--acc-bg); color: var(--acc); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 0.95rem; }
+.mh { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+.mh strong { font-size: 0.92rem; color: var(--acc); }
+.mh .role { font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.mh time { font-family: var(--f-mono); font-size: 0.72rem; color: var(--ink-2); }
+.msg p { overflow-wrap: anywhere; }
+.sys { text-align: center; font-size: 0.84rem; color: var(--ink-2); display: flex; align-items: center; gap: 12px; animation: rise 0.25s ease-out both; }
+.sys::before, .sys::after { content: ""; height: 1px; background: var(--line); flex: 1; }
+.sys span { max-width: 36ch; }
+.att { margin-top: 6px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 8px 10px; width: fit-content; max-width: 100%; }
+.att .ext { font-family: var(--f-mono); font-size: 0.68rem; font-weight: 500; background: var(--acc-bg); color: var(--acc); border-radius: 4px; padding: 3px 6px; flex: none; }
+.att .fn { font-family: var(--f-mono); font-size: 0.82rem; overflow-wrap: anywhere; min-width: 0; }
+.att .sz { font-size: 0.78rem; color: var(--ink-2); white-space: nowrap; }
+.poll { margin-top: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); padding: 12px; display: grid; gap: 10px; }
+.poll .q { font-weight: 600; }
+.poll ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.poll li { display: grid; gap: 4px; font-size: 0.9rem; }
+.poll .row { display: flex; justify-content: space-between; gap: 12px; }
+.poll .row span:last-child { font-family: var(--f-mono); font-size: 0.8rem; color: var(--ink-2); white-space: nowrap; }
+.poll .track { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.poll .fill { height: 100%; background: var(--alu); border-radius: 4px; transition: width 0.6s ease-out; }
+.poll li[data-mine="1"] .row span:first-child { font-weight: 600; }
+.poll li[data-top="1"] .fill { background: var(--ok); }
+.poll .foot { font-size: 0.78rem; color: var(--ink-2); }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .msg, .sys { animation: none; } .poll .fill { transition: none; } }
+
+/* matriz */
+.scroll-x { overflow-x: auto; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--f-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+th[data-p] { color: var(--acc); }
+td.c { width: 1%; white-space: nowrap; }
+.pill { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; font-weight: 500; }
+.pill[data-v="sim"] { background: var(--ok-bg); color: var(--ok); }
+.pill[data-v="nao"] { background: var(--no-bg); color: var(--no); }
+.pill[data-v="leitura"] { background: var(--bulb); color: var(--on-bulb); }
+
+/* video */
+.vgrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+@media (min-width: 900px) { .vgrid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
+.poster { aspect-ratio: 16 / 9; max-width: 100%; border: 1.5px solid var(--line); border-radius: 12px; background-color: var(--surface); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; display: grid; place-items: center; text-align: center; padding: 16px; }
+.poster .inner { display: grid; gap: 10px; justify-items: center; }
+.poster .len { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem, 6vw, 3rem); line-height: 1; }
+.play { width: 52px; height: 52px; border-radius: 50%; background: var(--bulb); display: grid; place-items: center; }
+.play::before { content: ""; border-left: 16px solid var(--on-bulb); border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 4px; }
+.poster a { color: inherit; }
+.tline { display: flex; gap: 3px; margin-top: 16px; }
+.tline i { font-style: normal; height: 30px; border-radius: 5px; background: var(--acc-bg); color: var(--acc); display: grid; place-items: center; font-family: var(--f-mono); font-size: 0.72rem; min-width: 0; }
+.tline i[data-p="geral"] { --acc: var(--ink-2); --acc-bg: var(--line); }
+.tl-scale { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 0.72rem; color: var(--ink-2); margin-top: 6px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 14px; font-size: 0.85rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend b { width: 10px; height: 10px; border-radius: 3px; background: var(--acc); display: inline-block; }
+.scenes { display: grid; gap: 8px; }
+details.scene { background: var(--surface); border: 1.5px solid var(--line); border-radius: 10px; }
+details.scene[open] { border-color: var(--acc); }
+details.scene summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+details.scene summary::-webkit-details-marker { display: none; }
+details.scene .num { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--acc-bg); color: var(--acc); font-family: var(--f-mono); font-size: 0.8rem; }
+details.scene .tm { font-family: var(--f-mono); font-size: 0.78rem; color: var(--ink-2); white-space: nowrap; }
+details.scene .body { padding: 0 14px 16px 54px; display: grid; gap: 12px; font-size: 0.95rem; }
+details.scene dt { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+details.scene dd { margin: 2px 0 0; }
+.speech { font-style: italic; }
+.copybox { margin-top: 16px; display: grid; gap: 10px; }
+.copybox textarea { width: 100%; min-height: 180px; font-family: var(--f-mono); font-size: 0.8rem; background: var(--surface); color: var(--ink); border: 1.5px solid var(--line); border-radius: 8px; padding: 10px; }
+
+footer { border-top: 1px solid var(--line); }
+footer .in { padding-block: 28px 40px; color: var(--ink-2); font-size: 0.9rem; max-width: 1120px; }
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+(function () {
+  var useState = React.useState, useEffect = React.useEffect, useRef = React.useRef;
+  var html = htm.bind(React.createElement);
+
+  // Endereço do vídeo tutorial (YouTube, Drive...). Vazio enquanto o vídeo não for gravado.
+  var VIDEO_URL = '';
+
+  /* ---------- construtores de mensagens ---------- */
+  var S = function (at, text) { return { at: at, role: 'sistema', text: text }; };
+  var P = function (at, name, text, time) { return { at: at, role: 'prof', name: name, text: text, time: time }; };
+  var A = function (at, name, text, time) { return { at: at, role: 'aluno', name: name, text: text, time: time }; };
+  var V = function (at, name, text, time) { return { at: at, role: 'visitante', name: name, text: text, time: time }; };
+  var F = function (at, role, name, time, file, size) { return { at: at, role: role, name: name, time: time, att: { file: file, size: size } }; };
+  var Q = function (at, role, name, time, q, opts, mine) { return { at: at, role: role, name: name, time: time, poll: { q: q, opts: opts, mine: mine } }; };
+
+  /* ---------- conteudo ---------- */
+  var PERFIS = [
+    {
+      id: 'publico', nome: 'Público', quem: 'Visitante, sem login',
+      resumo: 'Leia salas abertas, entre com um código de convite e fale com a escola.',
+      cases: [
+        {
+          id: 'sala-aberta', titulo: 'Ler uma sala aberta sem criar conta', resumo: 'Mural e materiais públicos de um evento da escola.',
+          canal: '# feira-de-ciencias', ctx: 'Sala aberta · só leitura',
+          steps: [
+            { t: 'Abra o link da sala', onde: 'Link compartilhado pelo professor', d: 'Cole o endereço no navegador. Não é preciso criar conta para ler.' },
+            { t: 'Leia o mural', onde: 'Aba Mural', d: 'Os avisos fixados aparecem primeiro, com data e hora.' },
+            { t: 'Baixe os materiais públicos', onde: 'Aba Materiais', d: 'Regulamentos e cronogramas ficam disponíveis para qualquer visitante.' },
+            { t: 'Veja o convite para participar', onde: 'Campo de mensagem bloqueado', d: 'Para comentar, o sistema pede o código de convite da turma.' }
+          ],
+          messages: [
+            S(1, 'Você está como visitante. Pode ler o que é público, mas não pode escrever.'),
+            P(2, 'Profa. Marta', 'Bem-vindos à Feira de Ciências 2026! A apresentação dos projetos é sábado, 31/10, às 9h, no pátio.', '18:02'),
+            F(3, 'prof', 'Profa. Marta', '18:03', 'regulamento-feira-2026.pdf', '184 KB'),
+            P(4, 'Profa. Marta', 'Dúvidas sobre a inscrição? Entre na sala da sua turma com o código de convite.', '18:05'),
+            S(4, 'Para comentar, entre com um código de convite.')
+          ]
+        },
+        {
+          id: 'codigo-convite', titulo: 'Entrar com um código de convite', resumo: 'Do visitante ao aluno em quatro passos.',
+          canal: 'Entrar na turma', ctx: 'Acesso por código',
+          steps: [
+            { t: 'Escolha Entrar com código', onde: 'Tela inicial → Entrar com código', d: 'O código vem do professor, por mural, e-mail ou recado impresso.' },
+            { t: 'Digite o código', onde: 'Campo Código da turma', d: 'Letras maiúsculas e o ano, como em FIS-3B-2026.' },
+            { t: 'Confira a turma', onde: 'Tela de confirmação', d: 'O sistema mostra o nome da turma e do professor antes de você continuar.' },
+            { t: 'Crie seu acesso', onde: 'Nome, e-mail e senha', d: 'Depois disso você deixa de ser visitante e passa a aluno da turma.' }
+          ],
+          messages: [
+            S(1, 'Digite o código da turma para entrar.'),
+            V(2, 'Você', 'FIS-3B-2026', '19:40'),
+            S(3, 'Código válido: Física – 3º B, Profa. Marta. Crie seu acesso para continuar.'),
+            S(4, 'Acesso criado. Você agora participa da turma como aluno.'),
+            P(4, 'Profa. Marta', 'Boas-vindas! Passe pelo canal #boas-vindas e se apresente.', '19:41')
+          ]
+        },
+        {
+          id: 'contato-escola', titulo: 'Falar com a secretaria sem login', resumo: 'Tire uma dúvida geral informando só nome e e-mail.',
+          canal: '# atendimento', ctx: 'Seg a sex, 8h às 17h',
+          steps: [
+            { t: 'Abra o atendimento', onde: 'Botão Falar com a escola', d: 'Fica visível na página pública, mesmo sem entrar.' },
+            { t: 'Escreva sua dúvida', onde: 'Nome, e-mail e mensagem', d: 'O e-mail serve para receber a resposta caso você feche a página.' },
+            { t: 'Acompanhe a fila', onde: 'Indicador de posição', d: 'Você vê quantas pessoas estão antes de você.' },
+            { t: 'Receba o material', onde: 'Anexos da conversa', d: 'A secretaria pode enviar formulários direto no chat.' }
+          ],
+          messages: [
+            S(1, 'Atendimento da escola, segunda a sexta, das 8h às 17h.'),
+            V(2, 'Você', 'Boa tarde! Como faço para matricular meu filho no 6º ano?', '14:10'),
+            S(3, 'Mensagem enviada. Você é o 3º da fila.'),
+            P(3, 'Secretaria', 'Boa tarde! Precisamos da certidão de nascimento e de um comprovante de residência. Posso enviar o formulário?', '14:18'),
+            V(4, 'Você', 'Pode sim, obrigado!', '14:19'),
+            F(4, 'prof', 'Secretaria', '14:20', 'formulario-matricula-2027.pdf', '96 KB')
+          ]
+        }
+      ]
+    },
+    {
+      id: 'professor', nome: 'Professor', quem: 'Quem cria e conduz a turma',
+      resumo: 'Crie turmas, lance enquetes, fixe avisos e abra plantões de dúvidas.',
+      cases: [
+        {
+          id: 'criar-turma', titulo: 'Criar uma turma e convidar os alunos', resumo: 'Do zero ao primeiro aluno dentro da turma.',
+          canal: 'Física – 3º B', ctx: 'Turma 2026 · 34 alunos',
+          steps: [
+            { t: 'Crie a turma', onde: 'Turmas → Nova turma', d: 'Dê um nome claro, como disciplina e série. O ano letivo já vem preenchido.' },
+            { t: 'Escolha os canais', onde: 'Canais sugeridos', d: 'Comece com avisos, dúvidas e boas-vindas. Dá para criar outros depois.' },
+            { t: 'Compartilhe o código', onde: 'Botão Copiar código', d: 'Envie pelo mural da escola, e-mail ou grupo dos responsáveis.' },
+            { t: 'Acompanhe quem entrou', onde: 'Aba Membros', d: 'A lista mostra quem já entrou e quem ainda falta.' }
+          ],
+          messages: [
+            S(1, 'Turma criada: Física – 3º B · 2026.'),
+            S(2, 'Canais criados: #avisos, #duvidas e #boas-vindas.'),
+            S(3, 'Código de convite: FIS-3B-2026 · válido por 30 dias.'),
+            P(3, 'Profa. Marta', 'Pessoal, o código da turma é FIS-3B-2026. Entrem e se apresentem em #boas-vindas!', '19:05'),
+            A(4, 'Beatriz', 'Entrei! Oi, professora.', '19:07'),
+            A(4, 'Davi', 'Também entrei. Já posso ver o mural?', '19:08'),
+            S(4, '12 de 34 alunos já entraram.')
+          ]
+        },
+        {
+          id: 'enquete', titulo: 'Lançar uma enquete relâmpago', resumo: 'Descubra em dois minutos o que a turma não entendeu.',
+          canal: '# duvidas', ctx: 'Física – 3º B',
+          steps: [
+            { t: 'Abra o canal de dúvidas', onde: 'Canais → #duvidas', d: 'A enquete aparece para todos que estão no canal, com aviso no celular.' },
+            { t: 'Crie a enquete', onde: 'Botão + → Enquete', d: 'Escreva a pergunta, as opções e a duração. Duas a quatro opções funcionam melhor.' },
+            { t: 'Acompanhe os votos', onde: 'Barras de resultado', d: 'As barras se atualizam em tempo real. Você vê quantos votaram e quantos faltam.' },
+            { t: 'Feche e comente', onde: 'Encerrar enquete', d: 'Explique o resultado na própria conversa, para quem errou aprender com o contexto.' }
+          ],
+          messages: [
+            P(1, 'Profa. Marta', 'Vamos testar o que vimos hoje. Enquete relâmpago, 2 minutos!', '20:10'),
+            Q(2, 'prof', 'Profa. Marta', '20:10', 'Qual é a unidade de força no SI?', [
+              { l: 'Joule', v: 3 }, { l: 'Newton', v: 21 }, { l: 'Watt', v: 2 }, { l: 'Pascal', v: 4 }
+            ], -1),
+            S(3, 'Enquete aberta · 30 votos de 34 alunos.'),
+            S(4, 'Enquete encerrada.'),
+            P(4, 'Profa. Marta', '70% acertaram. Quem errou, em geral, confundiu força com energia. Vou revisar isso agora.', '20:13'),
+            A(4, 'Davi', 'Eu marquei Joule. Pode explicar a diferença?', '20:14'),
+            P(4, 'Profa. Marta', 'Claro, Davi. Joule mede energia, Newton mede força. Força vezes distância dá energia: 1 J = 1 N·m.', '20:15')
+          ]
+        },
+        {
+          id: 'aviso-material', titulo: 'Fixar um aviso com material anexo', resumo: 'Aviso de prova que ninguém perde de vista.',
+          canal: '# avisos', ctx: 'Física – 3º B',
+          steps: [
+            { t: 'Escreva o aviso', onde: 'Canal #avisos', d: 'Informe data, horário e conteúdo em uma mensagem curta.' },
+            { t: 'Anexe a lista de exercícios', onde: 'Botão Anexar', d: 'PDF, imagens e planilhas ficam salvos na aba Materiais.' },
+            { t: 'Fixe a mensagem', onde: 'Menu da mensagem → Fixar', d: 'Mensagens fixadas ficam no topo do canal e na tela inicial do aluno.' },
+            { t: 'Veja as confirmações', onde: 'Detalhes da mensagem', d: 'Saiba quem já leu e envie lembrete para quem ainda não viu.' }
+          ],
+          messages: [
+            P(1, 'Profa. Marta', 'Atenção: prova de Dinâmica na quarta, 28/10, às 7h30. Conteúdo: leis de Newton e atrito.', '17:30'),
+            F(2, 'prof', 'Profa. Marta', '17:31', 'lista-exercicios-forca.pdf', '212 KB'),
+            S(3, 'Mensagem fixada no topo de #avisos.'),
+            S(4, 'Confirmações de leitura: 27 de 34 alunos.'),
+            A(4, 'Beatriz', 'Professora, a prova cobre atrito também?', '17:44'),
+            P(4, 'Profa. Marta', 'Cobre, sim. Os exercícios 8 a 12 da lista são de atrito.', '17:46')
+          ]
+        },
+        {
+          id: 'plantao', titulo: 'Abrir um plantão de dúvidas', resumo: 'Atendimento em horário combinado, com fila.',
+          canal: '# plantao-terca', ctx: 'Terça, 27/10 · 19h às 20h',
+          steps: [
+            { t: 'Marque o plantão', onde: 'Canal → Novo plantão', d: 'Defina dia, horário e duração. O aviso vai para a turma.' },
+            { t: 'Receba a fila', onde: 'Lista de espera', d: 'Os alunos entram na fila e você atende na ordem.' },
+            { t: 'Peça o material do aluno', onde: 'Anexos', d: 'Uma foto do caderno costuma resolver mais rápido do que a explicação por escrito.' },
+            { t: 'Encerre e veja o resumo', onde: 'Botão Encerrar plantão', d: 'O sistema mostra quantos atendimentos foram feitos.' }
+          ],
+          messages: [
+            P(1, 'Profa. Marta', 'Plantão de dúvidas na terça, 27/10, das 19h às 20h. Entrem na fila quando quiserem.', '16:00'),
+            S(2, 'Fila aberta · 0 alunos.'),
+            A(2, 'Davi', 'Entrei na fila. Dúvida: exercício 9, diagrama de forças.', '19:02'),
+            S(2, 'Davi é o 1º da fila.'),
+            P(3, 'Profa. Marta', 'Davi, pode mandar uma foto do seu desenho?', '19:04'),
+            F(3, 'aluno', 'Davi', '19:05', 'diagrama-ex9.jpg', '1,4 MB'),
+            P(3, 'Profa. Marta', 'Falta a força normal. Ela é perpendicular ao plano. Tenta de novo e me conta.', '19:07'),
+            S(4, 'Plantão encerrado · 6 atendimentos.')
+          ]
+        }
+      ]
+    },
+    {
+      id: 'aluno', nome: 'Aluno', quem: 'Quem participa e estuda',
+      resumo: 'Entre na turma, tire dúvidas, vote em enquetes e monte grupos de estudo.',
+      cases: [
+        {
+          id: 'entrar-apresentar', titulo: 'Entrar na turma e se apresentar', resumo: 'Primeiro acesso e primeiro recado.',
+          canal: '# boas-vindas', ctx: 'Física – 3º B',
+          steps: [
+            { t: 'Entre com o código', onde: 'Tela inicial → Entrar com código', d: 'Use o código que o professor passou. Ele aparece uma vez só no seu acesso.' },
+            { t: 'Apresente-se', onde: 'Canal #boas-vindas', d: 'Diga seu nome e o que espera da disciplina. Os colegas e o professor respondem ali mesmo.' },
+            { t: 'Ative as notificações', onde: 'Canal #avisos → Sino', d: 'Assim você não perde avisos de prova e mudanças de horário.' }
+          ],
+          messages: [
+            S(1, 'Você entrou em Física – 3º B.'),
+            P(2, 'Profa. Marta', 'Bem-vindo(a)! Conta para a turma seu nome e o que espera da disciplina.', '19:12'),
+            A(2, 'Lucas', 'Oi, sou o Lucas. Quero entender melhor as leis de Newton.', '19:15'),
+            P(2, 'Profa. Marta', 'Boa, Lucas! Vamos começar por elas na semana que vem.', '19:16'),
+            A(2, 'Beatriz', 'Bem-vindo, Lucas! Também estudo no turno da manhã.', '19:17'),
+            S(3, 'Notificações ativadas para #avisos.')
+          ]
+        },
+        {
+          id: 'perguntar', titulo: 'Perguntar uma dúvida e marcar como resolvida', resumo: 'Pergunte no canal certo e ajude quem vem depois.',
+          canal: '# duvidas', ctx: 'Física – 3º B',
+          steps: [
+            { t: 'Escolha o canal certo', onde: 'Canais → #duvidas', d: 'Dúvidas de conteúdo ficam aqui. Avisos e recados ficam nos outros canais.' },
+            { t: 'Escreva a pergunta', onde: 'Campo de mensagem', d: 'Diga o que você já tentou. Fica mais fácil de responder.' },
+            { t: 'Leia as respostas', onde: 'Conversa do canal', d: 'Colegas e professor podem responder. O professor identifica as respostas dele.' },
+            { t: 'Marque como resolvida', onde: 'Menu da mensagem → Resolvida', d: 'A dúvida sai da lista de pendentes e fica registrada para consulta.' }
+          ],
+          messages: [
+            A(1, 'Lucas', 'Alguém me explica por que a força normal nem sempre é igual ao peso?', '21:02'),
+            A(2, 'Beatriz', 'Só é igual quando a superfície é horizontal e nada puxa nem empurra na vertical.', '21:05'),
+            P(3, 'Profa. Marta', 'Isso, Beatriz. Lucas, num plano inclinado a normal vale P·cos θ. Quer ver um exemplo?', '21:09'),
+            A(3, 'Lucas', 'Quero sim!', '21:10'),
+            F(3, 'prof', 'Profa. Marta', '21:12', 'exemplo-plano-inclinado.pdf', '148 KB'),
+            S(4, 'Lucas marcou a dúvida como resolvida.')
+          ]
+        },
+        {
+          id: 'enquete-materiais', titulo: 'Votar numa enquete e achar os materiais', resumo: 'Participe com um toque e consulte o que o professor fixou.',
+          canal: '# duvidas', ctx: 'Física – 3º B',
+          steps: [
+            { t: 'Abra a enquete', onde: 'Notificação → #duvidas', d: 'O aviso chega no celular assim que o professor publica.' },
+            { t: 'Escolha uma opção', onde: 'Toque na opção', d: 'Seu voto aparece em destaque e os resultados se atualizam.' },
+            { t: 'Abra os materiais fixados', onde: 'Aba Fixados', d: 'Listas, resumos e links do professor ficam reunidos num lugar só.' }
+          ],
+          messages: [
+            P(1, 'Profa. Marta', 'Quem quer uma revisão extra na sexta, antes da prova?', '18:20'),
+            Q(2, 'prof', 'Profa. Marta', '18:20', 'Horário da revisão de sexta', [
+              { l: 'Sim, de manhã', v: 14 }, { l: 'Sim, à tarde', v: 9 }, { l: 'Não preciso', v: 11 }
+            ], 0),
+            A(2, 'Lucas', 'Votei na manhã.', '18:22'),
+            S(3, 'Materiais fixados: lista-exercicios-forca.pdf e resumo-leis-newton.pdf.')
+          ]
+        },
+        {
+          id: 'grupo-estudo', titulo: 'Criar um grupo de estudo', resumo: 'Reúna colegas para revisar antes da prova.',
+          canal: 'Grupo: Revisão de Dinâmica', ctx: '3 participantes',
+          steps: [
+            { t: 'Crie o grupo', onde: 'Grupos → Novo grupo', d: 'Dê um nome ligado ao assunto, como Revisão de Dinâmica.' },
+            { t: 'Convide os colegas', onde: 'Botão Convidar', d: 'Só quem está na mesma turma aparece na lista de convite.' },
+            { t: 'Combine o horário', onde: 'Conversa do grupo', d: 'Fixe a mensagem com dia e hora para ninguém esquecer.' }
+          ],
+          messages: [
+            S(1, 'Lucas criou o grupo Revisão de Dinâmica.'),
+            A(2, 'Lucas', 'Galera, quem topa revisar para a prova? Sugiro segunda, 26/10, às 19h.', '15:30'),
+            A(2, 'Beatriz', 'Topo! Levo a lista de exercícios resolvida até o 7.', '15:33'),
+            A(2, 'Davi', 'Eu também. Já entendi atrito, posso explicar.', '15:35'),
+            S(3, '3 participantes · mensagem de horário fixada.'),
+            A(3, 'Lucas', 'Combinado. Nos falamos aqui, segunda às 19h.', '15:36')
+          ]
+        }
+      ]
+    }
+  ];
+
+  var MATRIZ = [
+    ['Ler o mural de uma sala aberta', 'leitura', 'sim', 'sim'],
+    ['Ler as mensagens da turma', 'nao', 'sim', 'sim'],
+    ['Escrever nos canais', 'nao', 'sim', 'sim'],
+    ['Falar com a secretaria da escola', 'sim', 'sim', 'sim'],
+    ['Mensagem direta entre aluno e professor', 'nao', 'sim', 'sim'],
+    ['Criar grupos de estudo', 'nao', 'sim', 'sim'],
+    ['Votar em enquetes', 'nao', 'sim', 'nao'],
+    ['Criar enquetes', 'nao', 'nao', 'sim'],
+    ['Criar turma e gerar código de convite', 'nao', 'nao', 'sim'],
+    ['Fixar avisos e anexar materiais', 'nao', 'nao', 'sim'],
+    ['Moderar mensagens', 'nao', 'nao', 'sim'],
+    ['Ver confirmações de leitura e participação', 'nao', 'nao', 'sim']
+  ];
+  var VLABEL = { sim: 'Sim', nao: 'Não', leitura: 'Só leitura' };
+
+  var CENAS = [
+    { p: 'geral', t: 'Abertura', s: 15,
+      tela: 'Logo do Eureca Chat sobre fundo quadriculado. Transição para a tela inicial.',
+      fala: 'Oi! Neste vídeo você conhece o Eureca Chat, o chat das turmas, em menos de cinco minutos.',
+      dica: 'Grave a abertura por último, com a duração final já conhecida.' },
+    { p: 'geral', t: 'Três perfis, um chat', s: 30,
+      tela: 'Tela de entrada com três caminhos: visitante, professor e aluno. Seta destacando cada um. Tabela de permissões por 5 segundos.',
+      fala: 'O sistema atende três tipos de uso: quem só visita, quem ensina e quem estuda. Cada perfil vê e faz coisas diferentes.',
+      dica: 'Use a tabela de permissões desta página como quadro de apoio.' },
+    { p: 'publico', t: 'Visitante: sala aberta e convite', s: 40,
+      tela: 'Abrir o link de uma sala aberta, rolar o mural, tentar escrever e ver o convite. Digitar o código de convite.',
+      fala: 'Sem login, você lê o mural e baixa os materiais públicos. Para participar, entre com o código de convite que o professor compartilhou.',
+      dica: 'Grave numa janela anônima do navegador para provar que não há login.' },
+    { p: 'professor', t: 'Professor: criar turma e convidar', s: 50,
+      tela: 'Turmas → Nova turma. Preencher o nome, escolher canais, copiar o código e enviar aos alunos.',
+      fala: 'Para começar, crie a turma, escolha os canais e compartilhe o código. Em poucos segundos os alunos entram.',
+      dica: 'Use nomes fictícios. Não mostre dados de alunos reais.' },
+    { p: 'professor', t: 'Professor: enquete e aviso fixado', s: 50,
+      tela: 'No canal de dúvidas, criar uma enquete relâmpago e acompanhar os votos. Fixar um aviso com anexo.',
+      fala: 'Quer saber se a turma entendeu? Lance uma enquete e veja as respostas chegarem. Avisos importantes ficam fixados no topo.',
+      dica: 'Peça a dois colegas que votem ao vivo para as barras se moverem.' },
+    { p: 'aluno', t: 'Aluno: entrar e perguntar', s: 50,
+      tela: 'Entrar com o código, apresentar-se, perguntar no canal de dúvidas, receber a resposta e marcar como resolvida.',
+      fala: 'Como aluno, você entra com o código, se apresenta e pergunta no canal. Quando a dúvida acabar, marque como resolvida para ajudar quem vem depois.',
+      dica: 'Mostre a notificação chegando no celular.' },
+    { p: 'aluno', t: 'Aluno: grupo de estudo e materiais', s: 30,
+      tela: 'Criar o grupo de estudo, convidar colegas e abrir a aba Fixados.',
+      fala: 'Precisa estudar junto? Crie um grupo. E os materiais fixados pelo professor ficam sempre à mão.',
+      dica: 'Termine a cena na aba Fixados.' },
+    { p: 'geral', t: 'Fechamento', s: 20,
+      tela: 'Voltar à tela inicial. Mostrar o botão de ajuda e o contato do suporte.',
+      fala: 'Agora é com você. Escolha seu perfil, abra uma turma e comece a conversar. Em caso de dúvida, use o botão de ajuda.',
+      dica: 'Deixe o último quadro parado por 3 segundos.' }
+  ];
+  var PNOME = { geral: 'Geral', publico: 'Público', professor: 'Professor', aluno: 'Aluno' };
+  var ROLE_LABEL = { prof: 'Professor', aluno: 'Aluno', visitante: 'Visitante' };
+
+  /* ---------- utilitarios ---------- */
+  function mmss(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+  function initials(name) {
+    var w = name.split(' ').filter(function (x) { return x.slice(-1) !== '.'; });
+    return (w[0] || name).charAt(0).toUpperCase();
+  }
+  function extOf(f) { return f.split('.').pop().toUpperCase(); }
+  function roteiroTexto() {
+    var total = CENAS.reduce(function (a, c) { return a + c.s; }, 0);
+    var t = 0;
+    var out = ['ROTEIRO DO VÍDEO TUTORIAL GERAL · Eureca Chat · ' + mmss(total), ''];
+    CENAS.forEach(function (c, i) {
+      out.push('CENA ' + (i + 1) + ' · ' + c.t + ' (' + mmss(t) + ' a ' + mmss(t + c.s) + ')');
+      out.push('Tela: ' + c.tela);
+      out.push('Narração: ' + c.fala);
+      out.push('Dica de gravação: ' + c.dica);
+      out.push('');
+      t += c.s;
+    });
+    return out.join('\n');
+  }
+
+  /* ---------- componentes ---------- */
+  function Poll(props) {
+    var p = props.poll;
+    var total = p.opts.reduce(function (a, o) { return a + o.v; }, 0);
+    var max = Math.max.apply(null, p.opts.map(function (o) { return o.v; }));
+    var _s = useState(0), on = _s[0], setOn = _s[1];
+    useEffect(function () { var id = setTimeout(function () { setOn(1); }, 60); return function () { clearTimeout(id); }; }, []);
+    return html`<div className="poll">
+      <div className="q">${p.q}</div>
+      <ul>
+        ${p.opts.map(function (o, i) {
+          var pct = Math.round(o.v * 100 / total);
+          return html`<li key=${i} data-mine=${p.mine === i ? '1' : '0'} data-top=${o.v === max ? '1' : '0'}>
+            <div className="row"><span>${o.l}${p.mine === i ? ' (seu voto)' : ''}</span><span>${o.v} · ${pct}%</span></div>
+            <div className="track"><div className="fill" style=${{ width: on ? pct + '%' : '0%' }}></div></div>
+          </li>`;
+        })}
+      </ul>
+      <div className="foot">${total} votos</div>
+    </div>`;
+  }
+
+  function Msg(props) {
+    var m = props.m;
+    if (m.role === 'sistema') {
+      return html`<div className="sys"><span>${m.text}</span></div>`;
+    }
+    return html`<div className="msg" data-role=${m.role}>
+      <div className="av" aria-hidden="true">${initials(m.name)}</div>
+      <div className="mb">
+        <div className="mh"><strong>${m.name}</strong><span className="role">${ROLE_LABEL[m.role]}</span><time>${m.time}</time></div>
+        ${m.text ? html`<p>${m.text}</p>` : null}
+        ${m.att ? html`<div className="att"><span className="ext">${extOf(m.att.file)}</span><span className="fn">${m.att.file}</span><span className="sz">${m.att.size}</span></div>` : null}
+        ${m.poll ? html`<${Poll} poll=${m.poll} />` : null}
+      </div>
+    </div>`;
+  }
+
+  function Simulator(props) {
+    var c = props.c, step = props.step;
+    var ref = useRef(null);
+    var shown = [];
+    c.messages.forEach(function (m, i) { if (m.at <= step + 1) shown.push({ m: m, k: c.id + '-' + i }); });
+    useEffect(function () {
+      if (ref.current) ref.current.scrollTop = ref.current.scrollHeight;
+    }, [c.id, step]);
+    return html`<div className="chat">
+      <div className="chat-head">
+        <div><div className="ch">${c.canal}</div><div className="ctx">${c.ctx}</div></div>
+        <span className="tag">Exemplo</span>
+      </div>
+      <div className="chat-body" ref=${ref} role="log" aria-live="polite" aria-label="Conversa de exemplo">
+        ${shown.map(function (x) { return html`<${Msg} key=${x.k} m=${x.m} />`; })}
+      </div>
+    </div>`;
+  }
+
+  function Workbench(props) {
+    var perfil = props.perfil, caseId = props.caseId, step = props.step;
+    var c = perfil.cases.filter(function (x) { return x.id === caseId; })[0] || perfil.cases[0];
+    var last = c.steps.length - 1;
+    return html`<div className="bench" data-p=${perfil.id}>
+      <div className="col">
+        <div>
+          <span className="label">Exemplos de uso · ${perfil.nome}</span>
+          <div className="cases">
+            ${perfil.cases.map(function (x) {
+              return html`<button key=${x.id} className="case" aria-pressed=${x.id === c.id} onClick=${function () { props.onCase(x.id); }}>
+                <b>${x.titulo}</b><span>${x.resumo}</span>
+              </button>`;
+            })}
+          </div>
+        </div>
+        <div>
+          <span className="label">Passo a passo</span>
+          <ol className="steps">
+            ${c.steps.map(function (s, i) {
+              var state = i < step ? 'done' : i === step ? 'active' : 'todo';
+              return html`<li key=${c.id + i}>
+                <button className="step" data-state=${state} aria-current=${i === step ? 'step' : undefined} onClick=${function () { props.onStep(i); }}>
+                  <span className="num">${i + 1}</span>
+                  <span>
+                    <span className="tt">${s.t}</span>
+                    ${i === step ? html`<span className="more"><span>${s.d}</span><span className="onde">${s.onde}</span></span>` : null}
+                  </span>
+                </button>
+              </li>`;
+            })}
+          </ol>
+        </div>
+        <div className="ctrl">
+          <button className="btn" disabled=${step === 0} onClick=${function () { props.onStep(step - 1); }}>Passo anterior</button>
+          <button className="btn primary" disabled=${step === last} onClick=${function () { props.onStep(step + 1); }}>Próximo passo</button>
+          <button className="btn" onClick=${function () { props.onStep(0); }}>Reiniciar</button>
+        </div>
+      </div>
+      <div className="sim"><${Simulator} c=${c} step=${step} /></div>
+    </div>`;
+  }
+
+  function Matriz() {
+    return html`<div className="scroll-x">
+      <table>
+        <thead><tr>
+          <th scope="col">Ação</th>
+          <th scope="col" data-p="publico">Público</th>
+          <th scope="col" data-p="aluno">Aluno</th>
+          <th scope="col" data-p="professor">Professor</th>
+        </tr></thead>
+        <tbody>
+          ${MATRIZ.map(function (r, i) {
+            return html`<tr key=${i}>
+              <td>${r[0]}</td>
+              ${[1, 2, 3].map(function (j) { return html`<td className="c" key=${j}><span className="pill" data-v=${r[j]}>${VLABEL[r[j]]}</span></td>`; })}
+            </tr>`;
+          })}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  function Video() {
+    var total = CENAS.reduce(function (a, c) { return a + c.s; }, 0);
+    var _r = useState(null), raw = _r[0], setRaw = _r[1];
+    var _k = useState(false), copied = _k[0], setCopied = _k[1];
+    var starts = [], acc = 0;
+    CENAS.forEach(function (c) { starts.push(acc); acc += c.s; });
+    var taRef = useRef(null);
+
+    function copiar() {
+      var txt = roteiroTexto();
+      var done = function () { setCopied(true); setRaw(null); setTimeout(function () { setCopied(false); }, 2000); };
+      var fail = function () { setRaw(txt); };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, fail);
+        else fail();
+      } catch (e) { fail(); }
+    }
+    useEffect(function () { if (raw && taRef.current) { taRef.current.focus(); taRef.current.select(); } }, [raw]);
+
+    return html`<div className="vgrid">
+      <div>
+        <div className="poster">
+          <div className="inner">
+            <div className="play" aria-hidden="true"></div>
+            <div className="len">${mmss(total)}</div>
+            ${VIDEO_URL
+              ? html`<a className="btn primary" style=${{ '--acc': 'var(--ink)', textDecoration: 'none' }} href=${VIDEO_URL} target="_blank" rel="noopener">Assistir ao vídeo</a>`
+              : html`<span className="kicker">Vídeo em produção · roteiro ao lado</span>`}
+          </div>
+        </div>
+        <div className="tline" role="img" aria-label="Linha do tempo das cenas">
+          ${CENAS.map(function (c, i) {
+            return html`<i key=${i} data-p=${c.p} style=${{ flex: c.s + ' 1 0' }} title=${c.t}>${i + 1}</i>`;
+          })}
+        </div>
+        <div className="tl-scale"><span>0:00</span><span>${mmss(Math.round(total / 2))}</span><span>${mmss(total)}</span></div>
+        <div className="legend">
+          ${['geral', 'publico', 'professor', 'aluno'].map(function (k) {
+            return html`<span key=${k} data-p=${k === 'geral' ? undefined : k} style=${k === 'geral' ? { '--acc': 'var(--ink-2)' } : undefined}><b></b>${PNOME[k]}</span>`;
+          })}
+        </div>
+        <div className="copybox">
+          <div className="ctrl"><button className="btn" onClick=${copiar}>${copied ? 'Roteiro copiado' : 'Copiar roteiro completo'}</button></div>
+          ${raw ? html`<div><span className="label">Selecione e copie o texto abaixo</span><textarea ref=${taRef} readOnly value=${raw} aria-label="Roteiro completo"></textarea></div>` : null}
+        </div>
+      </div>
+      <div className="scenes">
+        ${CENAS.map(function (c, i) {
+          return html`<details className="scene" key=${i} data-p=${c.p === 'geral' ? undefined : c.p} style=${c.p === 'geral' ? { '--acc': 'var(--ink-2)', '--acc-bg': 'var(--line)' } : undefined}>
+            <summary>
+              <span className="num">${i + 1}</span>
+              <b>${c.t}</b>
+              <span className="tm">${mmss(starts[i])} · ${c.s}s</span>
+            </summary>
+            <div className="body">
+              <dl style=${{ margin: 0, display: 'grid', gap: '12px' }}>
+                <div><dt>O que gravar</dt><dd>${c.tela}</dd></div>
+                <div><dt>Narração</dt><dd className="speech">${c.fala}</dd></div>
+                <div><dt>Dica de gravação</dt><dd>${c.dica}</dd></div>
+              </dl>
+            </div>
+          </details>`;
+        })}
+      </div>
+    </div>`;
+  }
+
+  function App() {
+    var initial = 'publico';
+    try {
+      var h = (location.hash || '').slice(1);
+      if (PERFIS.some(function (p) { return p.id === h; })) initial = h;
+    } catch (e) {}
+    var _p = useState(initial), pid = _p[0], setPid = _p[1];
+    var perfil = PERFIS.filter(function (p) { return p.id === pid; })[0];
+    var _c = useState(perfil.cases[0].id), caseId = _c[0], setCaseId = _c[1];
+    var _s = useState(0), step = _s[0], setStep = _s[1];
+
+    function escolherPerfil(id) {
+      var p = PERFIS.filter(function (x) { return x.id === id; })[0];
+      setPid(id); setCaseId(p.cases[0].id); setStep(0);
+    }
+    function escolherCaso(id) { setCaseId(id); setStep(0); }
+
+    return html`<${React.Fragment}>
+      <header className="bar"><div className="in">
+        <div className="brand"><span className="bulb" aria-hidden="true"></span>Eureca Chat</div>
+        <nav aria-label="Seções">
+          <a href="#perfis">Perfis</a>
+          <a href="#permissoes">Permissões</a>
+          <a href="#video">Vídeo</a>
+        </nav>
+      </div></header>
+
+      <main>
+        <section className="hero"><div className="in">
+          <div className="kicker">Tutorial de uso · 3 perfis · 11 exemplos</div>
+          <h1>Eureca Chat <span className="mark">na prática</span></h1>
+          <p className="lede">Veja como visitantes, professores e alunos usam o chat da turma. Cada exemplo traz uma conversa de simulação e o passo a passo para você repetir no sistema.</p>
+          <div className="tiles" role="group" aria-label="Escolha um perfil">
+            ${PERFIS.map(function (p) {
+              return html`<button key=${p.id} className="tile" data-p=${p.id} aria-pressed=${p.id === pid} onClick=${function () { escolherPerfil(p.id); }}>
+                <span className="who"><span className="dot"></span>${p.quem}</span>
+                <strong>${p.nome}</strong>
+                <span className="d">${p.resumo}</span>
+                <span className="n">${p.cases.length} exemplos</span>
+              </button>`;
+            })}
+          </div>
+        </div></section>
+
+        <section className="block" id="perfis"><div className="in">
+          <div className="sec-head">
+            <span className="kicker">Perfil: ${perfil.nome}</span>
+            <h2>Exemplos para quem usa como ${perfil.nome.toLowerCase()}</h2>
+            <p>Escolha um exemplo, avance pelos passos e acompanhe a conversa se formando ao lado.</p>
+          </div>
+          <${Workbench} perfil=${perfil} caseId=${caseId} step=${step} onCase=${escolherCaso} onStep=${setStep} />
+        </div></section>
+
+        <section className="block" id="permissoes"><div className="in">
+          <div className="sec-head">
+            <span className="kicker">Comparativo</span>
+            <h2>O que cada perfil pode fazer</h2>
+            <p>Use a tabela para decidir com qual perfil entrar e o que esperar de cada um.</p>
+          </div>
+          <${Matriz} />
+        </div></section>
+
+        <section className="block" id="video"><div className="in">
+          <div className="sec-head">
+            <span className="kicker">Vídeo tutorial geral</span>
+            <h2>Roteiro cena a cena</h2>
+            <p>Oito cenas, quatro minutos e quarenta e cinco segundos, passando pelos três perfis. Abra cada cena para ver o que gravar, a narração e uma dica.</p>
+          </div>
+          <${Video} />
+        </div></section>
+      </main>
+
+      <footer><div className="in">
+        Exemplos ilustrativos. Nomes de telas, botões e permissões podem variar conforme a configuração da sua escola.
+      </div></footer>
+    <//>`;
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(html`<${App} />`);
+})();
+</script>
+
+</body></html>

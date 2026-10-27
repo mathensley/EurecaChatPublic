@@ -1,0 +1,160 @@
+{
+  "nome_da_tabela": "estudante",
+  "dados": {
+    "matricula_do_estudante": {
+      "type": "TEXT",
+      "description": "Código da matrícula do estudante.",
+      "mapper": "matricula_do_estudante"
+    },
+    "nome_do_estudante": {
+      "type": "TEXT",
+      "description": null,
+      "mapper": "nome_do_estudante"
+    },
+    "codigo_do_curso": {
+      "type": "INTEGER",
+      "description": null,
+      "mapper": "codigo_do_curso"
+    },
+    "codigo_do_curriculo": {
+      "type": "INTEGER",
+      "description": "Ano do curriculo do curso do estudante.",
+      "mapper": "codigo_do_curriculo"
+    },
+    "estado_civil": {
+      "type": "TEXT",
+      "description": "'Solteiro', 'Casado', 'Separado Judicialmente', 'Viúvo', 'Divorciado', 'Não Informado', 'Desquitado' ou 'Outro'.",
+      "mapper": "estado_civil"
+    },
+    "sexo": {
+      "type": "TEXT",
+      "description": "'FEMININO' ou 'MASCULINO'.",
+      "mapper": "sexo"
+    },
+    "idade": {
+      "type": "INTEGER",
+      "description": null,
+      "mapper": "idade"
+    },
+    "situacao": {
+      "type": "TEXT",
+      "description": "Status atual (de hoje) do estudante: 'ATIVO', 'ATIVO - FORMANDO', 'CONCLUÍDO' ou 'CANCELADO'. Reflete a situação presente, não a situação que o estudante tinha em algum momento passado. Regra de decisão: (1) Se o verbo/termo da pergunta corresponde diretamente a um dos valores do enum (ex.: 'cancelaram' -> CANCELADO, 'se formaram ou concluíram' -> CONCLUÍDO), filtre por esse valor específico de situacao. (2) Se a pergunta usa verbo no passado sem correspondência direta a um valor do enum (ex.: 'cursaram', 'estudaram') e sem período explícito, NÃO filtre por situacao, pois a pergunta se refere a algo que já aconteceu e não há um status único que a represente. (3) Se a pergunta é sobre a situação presente, sem período e com verbo no presente (ex.: 'quantos estudantes tem a UFCG?', 'quantos estão cursando hoje?'), filtre por situacao IN ('ATIVO', 'ATIVO - FORMANDO'). (4) Se a intenção for ambígua mesmo após essas regras, pergunte ao usuário qual situação ele quer ou todas.",
+      "mapper": "situacao"
+    },
+    "motivo_de_evasao": {
+      "type": "TEXT",
+      "description": "motivo de evasão do curso para situacao CANCELADO. São eles: 'ABANDONO (NENHUMA MATRÍCULA)', 'DECURSO DE PRAZO MÁXIMO P/ CONCLUSÃO DE CURSO', 'SOLICITAÇÃO ESPONTÂNEA', 'EFETIVAÇÃO DE NOVO CADASTRO', 'ABANDONO (NENHUMA INTEGRALIZAÇÃO)', 'INSUFICIÊNCIA DE DESEMPENHO ACADÊMICO', 'TRANSF.P/OUTRA IES', 'CANC. POR REOPCAO', 'TÉRMINO DO BENEFÍCIO DO CONVÊNIO', 'CANCELAMENTO JUDICIAL', 'FALECIMENTO DO ALUNO', 'CADASTRO CANCELADO', 'DECISÃO ADMINISTRATIVA', 'PROGRAMA CANCELADO' e 'NÃO CONFIRMAÇÃO DE VÍNCULO'.",
+      "mapper": "motivo_que_saiu_do_curso"
+    },
+    "periodo_de_evasao": {
+      "type": "TEXT",
+      "description": "Período que o estudante saiu ou concluiu a universidade. Ele sempre será no seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Se o usuário perguntar sobre esse campo sem informar o período, você pode verificar se o campo é não nulo para saber se o estudante evadiu ou não.",
+      "mapper": "periodo_de_evasao"
+    },
+    "forma_de_ingresso": {
+      "type": "TEXT",
+      "description": "'SiSU', 'ALUNO ESPECIAL', 'MOBILIDADE ESTUDANTIL', 'TRANSF. COMPULSORIA', 'CONVENIO PEC-G', 'PROCESSO SELETIVO', 'PROCESSO SELETIVO ESPECÍFICO', 'REOPCAO', 'REOCUPAÇÃO DE VAGAS RESIDUAIS', 'NAO INFORMADO', 'PARFOR', 'PEC-RP', 'ALUNO EM MOBILIDADE INTERNACIONAL', 'PORTADOR DE DIPLOMA', 'VESTIBULAR', 'TRANSFERÊNCIA VOLUNTÁRIA', 'REOCUPAÇÃO DE VAGAS RESIDUAIS' ou 'JUDICIAL'. Só use esse campo se a query for como o estudante entrou no curso. Geralmente é SISU, use os demais quando falar sobre transferencia ou reingresso na pergunta.",
+      "mapper": "forma_que_entrou_no_curso"
+    },
+    "periodo_de_ingresso": {
+      "type": "TEXT",
+      "description": "Período que o estudante entrou na universidade pela primeira vez. Ele sempre será no seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+      "mapper": "periodo_de_ingresso"
+    },
+    "nacionalidade": {
+      "type": "TEXT",
+      "description": "'BRASILEIRO', 'TIMOR', 'VENEZUELANA', 'BENINENSE', 'GUINEENSE', 'SENEGALESA', 'MOCAMBICANA', 'CABO-VERDIANA', 'ANGOLANA', 'GUINE EQUATORIANA', 'EQUATORIANA', 'CONGOLESA', 'SAO TOME E PRINCIPE', 'ITALIANA', 'PORTUGUESA', 'JAMAICANA', 'NÃO INFORMADO', 'TIMORENSE', 'BRASILEIRA', 'NILOPOLIS', 'GABONESA', 'JAPONESA', 'HONDURENHA', 'PARAGUAIA', 'HAITIANA', 'URUGUAIA' ou 'ARGENTINA'.",
+      "mapper": "nacionalidade"
+    },
+    "cidade_de_nascimento": {
+      "type": "TEXT",
+      "description": null,
+      "mapper": "cidade_de_nascimento"
+    },
+    "unidade_federativa": {
+      "type": "TEXT",
+      "description": "Sigla do estado (UF) em relação a cidade de nascimento do estudante.",
+      "mapper": "unidade_federativa"
+    },
+    "cor": {
+      "type": "TEXT",
+      "description": "'Pardo', 'Não Informado', 'Indígeno', 'Remanescente de quilombo', 'Amarelo (de origem oriental)', 'Negro' ou 'Branco'.",
+      "mapper": "cor"
+    },
+    "deficiencias": {
+      "type": "TEXT",
+      "description": "Tipo de deficiência do estudante. Se usar esse atributo faça agrupamento se achar necessário. Pode ser 'Deficiência Intelectual', 'Síndrome de Asperger', 'Deficiência Visual - baixa visão', 'Transtorno do Déficit de Atenção/Hiperatividade', 'Surdez', 'Não Informado', 'Deficiência Física', 'Transtorno do Espectro Autista', 'Deficiência Auditiva', 'Deficiência Visual - cegueira', 'Outras Necessidades', 'Dislexia, disortografia, disgrafia ou discalculia', 'Síndrome de Rett' ou 'Transtorno Desintegrativo da Infância'. Só use se for perguntado uma deficiencia específica, se for geral não use.",
+      "mapper": "deficiencias"
+    },
+    "ano_de_conclusao_ensino_medio": {
+      "type": "INTEGER",
+      "description": null,
+      "mapper": "ano_de_conclusao_ensino_medio"
+    },
+    "tipo_de_ensino_medio": {
+      "type": "TEXT",
+      "description": "'Não Informado', 'Pública' ou 'Privada'.",
+      "mapper": "tipo_de_ensino_medio"
+    },
+    "periodos_completados": {
+      "type": "REAL",
+      "description": "Períodos que o estudante já completou até então. O período atual do estudante corresponde a este valor somado de 1. Por exemplo, periodos_completados = 8 indica que o estudante está cursando o 9º período.",
+      "mapper": "periodos_completados"
+    },
+    "renda_per_capita_ate": {
+      "type": "REAL",
+      "description": "Quantia numérica de salários mínimos, um salário mínimo é de 1530.",
+      "mapper": "renda_per_capita_ate"
+    },
+    "mc": {
+      "type": "REAL",
+      "description": "Essa coluna corresponde a 'MC', 'média', 'CRA', Média de conclusão do estudante.",
+      "mapper": "media_de_conclusao"
+    },
+    "iea": {
+      "type": "REAL",
+      "description": "IEA (Índice de Eficiência Acadêmica). Mede o desempenho global do estudante, considerando as notas e aprovações ao longo do curso.",
+      "mapper": "indice_eficiencia_academica"
+    },
+    "ira": {
+      "type": "REAL",
+      "description": "IRA (Índice de Rendimento Acadêmico). Avalia o aproveitamento acadêmico do estudante em um determinado período ou no acumulado do curso.",
+      "mapper": "indice_rendimento_academico"
+    },
+    "mcn": {
+      "type": "REAL",
+      "description": "MCN (Média de Conclusão Normalizada). Versão da Média de Conclusão ajustada ou ponderada segundo critérios específicos do curso ou turno.",
+      "mapper": "media_conclusao_normalizada"
+    },
+    "iean": {
+      "type": "REAL",
+      "description": "IEAN (Índice de Eficiência Acadêmica Normalizado). O índice de eficiência acadêmica recalculado ou ajustado para fins de comparação justa entre turmas.",
+      "mapper": "indice_eficiencia_academica_normalizado"
+    },
+    "iech": {
+      "type": "REAL",
+      "description": "IECH (Índice de Eficiência de Carga Horária). Relação entre a carga horária em que o estudante foi aprovado e a carga horária total exigida.",
+      "mapper": "indice_eficiencia_carga_horaria"
+    },
+    "iepl": {
+      "type": "REAL",
+      "description": "IEPL (Índice de Eficiência de Períodos Letivos). Avalia o progresso do estudante em relação ao tempo previsto (semestres/períodos) para a integralização do curso.",
+      "mapper": "indice_eficiencia_periodos_letivos"
+    },
+    "iechp": {
+      "type": "REAL",
+      "description": "IECHP (Índice de Eficiência de Carga Horária Ponderado). Variação do índice de carga horária que aplica pesos diferentes dependendo do tipo de disciplina ou atividade.",
+      "mapper": "indice_eficiencia_carga_horaria_ponderado"
+    },
+    "tem_deficiencia": {
+      "type": "TEXT",
+      "description": "'sim' ou 'nao'.",
+      "mapper": "tem_deficiencia"
+    },
+    "cotista": {
+      "type": "TEXT",
+      "description": "'sim' ou 'nao' se o estudante entrou usando cotas.",
+      "mapper": "cotista"
+    }
+  }
+}

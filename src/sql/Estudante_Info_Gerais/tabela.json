@@ -1,0 +1,204 @@
+{
+  "Estudante_Info_Gerais": {
+    "matricula_do_estudante": {
+      "type": "TEXT",
+      "description": "Código da matrícula do estudante.",
+      "mapper": "matricula_do_estudante"
+    },
+    "codigo_do_curso": {
+      "type": "INTEGER",
+      "description": "Código do curso. Esse código é numérico nunca use text",
+      "mapper": "codigo_do_curso"
+    },
+    "nome_do_curso": {
+      "type": "TEXT",
+      "description": "Nome do curso. Nunca use com siglas.",
+      "mapper": "nome_do_curso"
+    },
+    "turno_do_curso": {
+      "type": "TEXT",
+      "description": "Turno do curso.",
+      "mapper": "turno_do_curso"
+    },
+    "codigo_do_curriculo": {
+      "type": "INTEGER",
+      "description": "Curriculo do curso. Ano do curriculo do curso do estudante.",
+      "mapper": "codigo_do_curriculo"
+    },
+    "campus": {
+      "type": "INTEGER",
+      "description": "Número do campus",
+      "mapper": "codigo_do_campus"
+    },
+    "nome_do_campus": {
+      "type": "TEXT",
+      "description": "Nome do campus. Os campi da UFCG são esses a seguir, você só pode usar esses na consulta: 'Campina Grande', 'Cajazeiras', 'Sousa', 'Patos', 'Cuité', 'Sumé' ou 'Pombal'.",
+      "mapper": "nome_do_campus"
+    },
+    "codigo_do_setor": {
+      "type": "INTEGER",
+      "description": "Código do centro responsável pelos cursos;",
+      "mapper": "codigo_do_setor"
+    },
+    "nome_do_setor": {
+      "type": "TEXT",
+      "description": "Nome do centro responsável pelos cursos. Podem ser 'CH - CENTRO DE HUMANIDADES', 'CCT - CENTRO DE CIENCIAS E TECNOLOGIA', 'CEEI - CENTRO DE ENG. ELETRICA E INFORMATICA', 'CTRN - CENTRO DE TECNOLOGIA E RECURSOS NATURAIS', 'CCJS - CENTRO DE CIENCIAS JURIDICAS E SOCIAIS', 'CES - CENTRO DE EDUCACAO E SAUDE - CUITE', 'CSTR - CENTRO DE SAUDE E TECNOLOGIA RURAL', 'CFP - CENTRO DE FORMACAO DE PROFESSORES', 'CDSA - CENTRO DE DESENVOLVIMENTO DO SEMI-ARIDO' e 'CCTA - CENTRO DE CIENCIAS TEC. AGROALIMENTAR'.",
+      "mapper": "nome_do_setor"
+    },
+    "estado_civil": {
+      "type": "TEXT",
+      "description": "Estado cívil do estudante. Pode ser 'solteiro', 'casado', 'separado judicialmente', 'viúvo', 'divorciado', 'não informado' ou 'outro'.",
+      "mapper": "estado_civil"
+    },
+    "sexo": {
+      "type": "TEXT",
+      "description": "Sexo do estudante. ENUM 'FEMININO' ou 'MASCULINO';",
+      "mapper": "sexo"
+    },
+    "idade": {
+      "type": "INTEGER",
+      "description": "Idade do estudante;",
+      "mapper": "idade"
+    },
+    "situacao": {
+      "type": "TEXT",
+      "description": "Situação do estudante pode ser 'ativo' (estudantes cursando o curso atualmente), 'ativo - formando' (prestes a se formar), 'formado' e 'concluído' (esses dois são os estudantes formados), 'cadastrado' (estudantes que acabaram de entrar/ingressar no curso), 'não cadastrado', 'cancelado', 'desconhecido', 'trancado';",
+      "mapper": "situacao"
+    },
+    "motivo_de_evasao": {
+      "type": "TEXT",
+      "description": "motivo de evasão do curso.",
+      "mapper": "motivo_que_saiu_do_curso"
+    },
+    "periodo_de_evasao": {
+      "type": "TEXT",
+      "description": "Período que o estudante saiu ou concluiu a universidade. Ele sempre será no seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Se o usuário perguntar sobre esse campo sem informar o período, você pode verificar se o campo é não nulo para saber se o estudante evadiu ou não.",
+      "mapper": "periodo_de_evasao"
+    },
+    "forma_de_ingresso": {
+      "type": "TEXT",
+      "description": "ENUM que pode ser 'transf. compulsoria', 'convenio pec-g', 'processo seletivo específico', 'reopcao', 'reocupação de vagas residuais', 'nao informado', 'parfor', 'sisu', 'portador de diploma', 'vestibular', 'transferência voluntária' ou 'judicial'. Só use esse campo se a query for como o estudante entrou no curso. Geralmente é SISU, use os demais quando falar sobre transferencia ou reingresso na pergunta.",
+      "mapper": "forma_que_entrou_no_curso"
+    },
+    "periodo_de_ingresso": {
+      "type": "TEXT",
+      "description": "Período que o estudante entrou na universidade pela primeira vez. Ele sempre será n seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+      "mapper": "periodo_de_ingresso"
+    },
+    "nacionalidade": {
+      "type": "TEXT",
+      "description": "Nacionalidade do estudante. Só use esse atributo se na pergunta de fato especificar sobre a nacionalidade do estudante.",
+      "mapper": "nacionalidade"
+    },
+    "local_de_nascimento": {
+      "type": "TEXT",
+      "description": "Cidade de local de nascimento do estudante. Só use esse atributo se na pergunta de fato especificar sobre o local de nascimento;",
+      "mapper": "local_de_nascimento"
+    },
+    "naturalidade": {
+      "type": "TEXT",
+      "description": "Sigla do estado de local de nascimento do estudante. Só use esse atributo se na pergunta de fato especificar sobre o local de nascimento;",
+      "mapper": "estado_unidade_federativa"
+    },
+    "cor": {
+      "type": "TEXT",
+      "description": "Cor de pele do estudante, pode ser 'pardo', 'não informado', 'indígeno', 'remanescente de quilombo', 'amarelo (de origem oriental)', 'negro' ou 'branco'. Só use esse atributo se na pergunta de fato especificar sobre a cor do estudante.",
+      "mapper": "cor"
+    },
+    "deficiencias": {
+      "type": "TEXT",
+      "description": "Tipo de deficiência do estudante. Se usar esse atributo faça agrupamento se achar necessário. Pode ser 'deficiência intelectual', 'síndrome de asperger', 'deficiência visual - baixa visão', 'transtorno do déficit de atenção/hiperatividad...', 'surdez', 'não informado', 'deficiência física', 'transtorno do espectro autista', 'deficiência auditiva','deficiência visual - cegueira', 'outras necessidades', 'dislexia, disortografia, disgrafia ou discalculia', 'síndrome de rett' ou 'transtorno desintegrativo da infância'. Só use se for perguntado uma deficiencia específica, se for geral não use;",
+      "mapper": "deficiencias"
+    },
+    "ano_de_conclusao_ensino_medio": {
+      "type": "INTEGER",
+      "description": "Ano de conclusão do ensino médio do estudante.",
+      "mapper": "ano_de_conclusao_ensino_medio"
+    },
+    "tipo_de_ensino_medio": {
+      "type": "TEXT",
+      "description": "Tipo de ensino médio do estudante. ENUM que pode ser 'não informado', 'pública' ou 'privada';",
+      "mapper": "tipo_de_ensino_medio"
+    },
+    "politica_afirmativa": {
+      "type": "TEXT",
+      "description": "Nunca use esse atributo. Só use quando falar sobre cotas.",
+      "mapper": "politica_afirmativa_cotas"
+    },
+    "notas_acumuladas": {
+      "type": "REAL",
+      "description": "Soma de todas as notas nas disciplinas que o estudante já cursou;",
+      "mapper": "notas_acumuladas"
+    },
+    "periodos_completados": {
+      "type": "REAL",
+      "description": "Períodos que o estudante já completou até então, se quiser saber o período atual use o valor retornado mais um;",
+      "mapper": "periodos_completados"
+    },
+    "velocidade_media": {
+      "type": "REAL",
+      "description": "Média das médias dos créditos pagos pelo estudante no período. Indica o pace do estudante na progressão do curso, se está com uma graduação acelerada ou lenta, relativo a cada curso;",
+      "mapper": "velocidade_media"
+    },
+    "taxa_de_sucesso": {
+      "type": "REAL",
+      "description": "Porcentagem das disciplinas que o estudante foi aprovado até então;",
+      "mapper": "taxa_aprovacao_disciplina"
+    },
+    "renda_per_capita_ate": {
+      "type": "REAL",
+      "description": "Quantia numérica de salários mínimos, um salário mínimo é de 1530;",
+      "mapper": "renda_per_capita_ate"
+    },
+    "mc": {
+      "type": "REAL",
+      "description": "Essa coluna corresponde a 'MC', 'média', 'CRA', Média de conclusão do estudante.",
+      "mapper": "media_de_conclusao"
+    },
+    "iea": {
+      "type": "REAL",
+      "description": "IEA (Índice de Eficiência Acadêmica). Mede o desempenho global do estudante, considerando as notas e aprovações ao longo do curso.",
+      "mapper": "indice_eficiencia_academica"
+    },
+    "ira": {
+      "type": "REAL",
+      "description": "IRA (Índice de Rendimento Acadêmico). Avalia o aproveitamento acadêmico do estudante em um determinado período ou no acumulado do curso.",
+      "mapper": "indice_rendimento_academico"
+    },
+    "mcn": {
+      "type": "REAL",
+      "description": "MCN (Média de Conclusão Normalizada). Versão da Média de Conclusão ajustada ou ponderada segundo critérios específicos do curso ou turno.",
+      "mapper": "media_conclusao_normalizada"
+    },
+    "iean": {
+      "type": "REAL",
+      "description": "IEAN (Índice de Eficiência Acadêmica Normalizado). O índice de eficiência acadêmica recalculado ou ajustado para fins de comparação justa entre turmas.",
+      "mapper": "indice_eficiencia_academica_normalizado"
+    },
+    "iech": {
+      "type": "REAL",
+      "description": "IECH (Índice de Eficiência de Carga Horária). Relação entre a carga horária em que o estudante foi aprovado e a carga horária total exigida.",
+      "mapper": "indice_eficiencia_carga_horaria"
+    },
+    "iepl": {
+      "type": "REAL",
+      "description": "IEPL (Índice de Eficiência de Períodos Letivos). Avalia o progresso do estudante em relação ao tempo previsto (semestres/períodos) para a integralização do curso.",
+      "mapper": "indice_eficiencia_periodos_letivos"
+    },
+    "iechp": {
+      "type": "REAL",
+      "description": "IECHP (Índice de Eficiência de Carga Horária Ponderado). Variação do índice de carga horária que aplica pesos diferentes dependendo do tipo de disciplina ou atividade.",
+      "mapper": "indice_eficiencia_carga_horaria_ponderado"
+    },
+    "tem_deficiencia": {
+      "type": "TEXT",
+      "description": "ENUM 'sim' ou 'nao' se o estudante tem deficiencia;",
+      "mapper": "tem_deficiencia"
+    },
+    "cotista": {
+      "type": "TEXT",
+      "description": "ENUM 'sim' ou 'nao' se o estudante entrou usando cotas.",
+      "mapper": "cotista"
+    }
+  }
+}

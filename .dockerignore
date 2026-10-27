@@ -1,0 +1,41 @@
+# Git
+.git
+.gitignore
+.env
+eureca-sandbox.tar
+src/workdirs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Ambientes
+.venv/
+myvenv/
+env/
+venv/
+
+# Bancos locais
+*.sqlite
+*.db
+
+# Logs
+*.jsonl
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.yml
+
+# Cache
+.cache/
+**/node_modules/
+frontend/.next/
+frontend/out/
+frontend/pnpm-lock.yaml

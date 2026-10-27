@@ -1,0 +1,60 @@
+{
+    "nome_da_tabela": "inscricao",
+    "dados": {
+        "id_inscricao": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "id_inscricao"
+        },
+        "codigo_da_disciplina": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_da_disciplina"
+        },
+        "nome_da_disciplina": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_da_disciplina"
+        },
+        "matricula_do_estudante": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "matricula_do_estudante"
+        },
+        "tipo": {
+            "type": "TEXT",
+            "description": "'OBRIGATORIA' ou 'OPTATIVA'.",
+            "mapper": "tipo_de_disciplina"
+        },
+        "periodo": {
+            "type": "TEXT",
+            "description": "Período em que a disciplina foi ministrada.",
+            "mapper": "periodo"
+        },
+        "turma": {
+            "type": "INTEGER",
+            "description": "Número da turma. É um valor entre 1 e 10 (No máximo 10).",
+            "mapper": "turma"
+        },
+        "status": {
+            "type": "TEXT",
+            "description": "Status da disciplina cursada pelo estudante: 'Reprovado', 'Reprovado Por Média E Por Faltas', 'Cancelado' (cancelou a matrícula na disciplina — não confundir com o campo situacao do estudante, que é sobre o curso, não a disciplina), 'Trancado', 'Aprovado', 'Aprovado por Nota', 'Transferido', 'Indeferido' (não conseguiu vaga na disciplina), 'Desistencia' ou 'Em Curso' (cursando a disciplina atualmente). Regra de decisão: (1) Para reprovação em geral, sem especificar critério, use 'Reprovado' OR 'Reprovado Por Média E Por Faltas'. (2) Para aprovação em geral, sem especificar critério, use 'Aprovado' OR 'Aprovado por Nota'. (3) 'Em Curso' representa apenas o período atual — não use esse valor para perguntas sobre períodos passados, pois esses já foram concluídos e não fazem mais sentido como 'em curso'. (4) A pergunta pode não mencionar nenhum status para esta coluna. (5) Se não houver menção a status e a intenção não estiver clara nas REGRAS_DE_USO gerais, pergunte ao usuário se ele quer todos os status ou algum específico.",
+            "mapper": "status"
+        },
+        "media_final": {
+            "type": "REAL",
+            "description": "Nota final na disciplina.",
+            "mapper": "media_final"
+        },
+        "dispensas": {
+            "type": "TEXT",
+            "description": "'Sim' ou 'Não'. Indica se o estudante dispensou a disciplina.",
+            "mapper": "dispensas"
+        },
+        "matricula_do_professor": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "matricula_do_professor"
+        }
+    }
+}

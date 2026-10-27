@@ -1,0 +1,265 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Grafana Cloud Metrics",
+      "description": "Fonte Prometheus que recebe as métricas do Alloy.",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_LOKI",
+      "label": "Grafana Cloud Logs",
+      "description": "Fonte Loki que recebe os logs do Alloy.",
+      "type": "datasource",
+      "pluginId": "loki",
+      "pluginName": "Loki"
+    }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 3 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 6, "x": 0, "y": 0 },
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "value_and_name" },
+      "targets": [{ "expr": "sum(up{project=\"eurecachat\", environment=\"$environment\"}) or vector(0)", "legendFormat": "targets saudáveis", "refId": "A" }],
+      "title": "Coletas Alloy ativas",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never", "spanNulls": false }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 75 }, { "color": "red", "value": 90 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 9, "x": 6, "y": 0 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [{ "expr": "100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{project=\"eurecachat\", environment=\"$environment\", mode=\"idle\"}[5m])))", "legendFormat": "{{instance}}", "refId": "A" }],
+      "title": "CPU do host",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 75 }, { "color": "red", "value": 90 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 9, "x": 15, "y": 0 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [{ "expr": "100 * (1 - (node_memory_MemAvailable_bytes{project=\"eurecachat\", environment=\"$environment\"} / node_memory_MemTotal_bytes{project=\"eurecachat\", environment=\"$environment\"}))", "legendFormat": "{{instance}}", "refId": "A" }],
+      "title": "Memória do host",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 75 }, { "color": "red", "value": 90 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 7 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [{ "expr": "max by (instance) (100 * (1 - (node_filesystem_avail_bytes{project=\"eurecachat\", environment=\"$environment\", fstype!~\"tmpfs|devtmpfs|overlay|squashfs|nsfs|proc|sysfs\"} / node_filesystem_size_bytes{project=\"eurecachat\", environment=\"$environment\", fstype!~\"tmpfs|devtmpfs|overlay|squashfs|nsfs|proc|sysfs\"})))", "legendFormat": "{{instance}}", "refId": "A" }],
+      "title": "Maior uso de filesystem do host",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "mappings": [], "unit": "percentunit" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 7 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [{ "expr": "sum by (service) (rate(container_cpu_usage_seconds_total{project=\"eurecachat\", environment=\"$environment\", service!=\"\"}[5m])) or on() label_replace(sum(rate(container_cpu_usage_seconds_total{project=\"eurecachat\", environment=\"$environment\", id=\"/\"}[5m])), \"service\", \"Docker VM\", \"\", \"\")", "legendFormat": "{{service}}", "refId": "A" }],
+      "title": "CPU dos containers / Docker VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "mappings": [], "unit": "bytes" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 14 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [{ "expr": "sum by (service) (container_memory_working_set_bytes{project=\"eurecachat\", environment=\"$environment\", service!=\"\"}) or on() label_replace(max(container_memory_working_set_bytes{project=\"eurecachat\", environment=\"$environment\", id=\"/\"}), \"service\", \"Docker VM\", \"\", \"\")", "legendFormat": "{{service}}", "refId": "A" }],
+      "title": "Memória dos containers / Docker VM",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "mappings": [{ "options": { "0": { "color": "red", "text": "Ausente" }, "1": { "color": "green", "text": "Ativo" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 14 },
+      "options": { "showHeader": true },
+      "targets": [{ "expr": "max by (job, instance) (up{project=\"eurecachat\", environment=\"$environment\"})", "format": "table", "instant": true, "refId": "A" }],
+      "title": "Estado das coletas",
+      "transformations": [{ "id": "organize", "options": { "excludeByName": { "Time": true, "__name__": true, "environment": true, "project": true }, "renameByName": { "Value": "Estado" } } }],
+      "type": "table"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "${DS_LOKI}" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 21 },
+      "options": { "dedupStrategy": "none", "enableLogDetails": true, "prettifyJSON": true, "showCommonLabels": false, "showLabels": false, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true },
+      "targets": [{ "expr": "{project=\"eurecachat\", environment=\"$environment\", container=~\"$container\", level=~\"$level\"} |~ \"(?i)$search\"", "refId": "A" }],
+      "title": "Logs recentes dos containers",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 31 },
+      "panels": [],
+      "title": "PostgreSQL",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "mappings": [{ "options": { "0": { "color": "red", "text": "Indisponível" }, "1": { "color": "green", "text": "Disponível" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 5, "w": 4, "x": 0, "y": 32 },
+      "options": { "colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "value_and_name" },
+      "targets": [{ "expr": "max(pg_up{project=\"eurecachat\", environment=\"$environment\"}) or vector(0)", "legendFormat": "PostgreSQL", "refId": "A" }],
+      "title": "Disponibilidade do PostgreSQL",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "max": 100, "min": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 70 }, { "color": "red", "value": 85 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 5, "w": 5, "x": 4, "y": 32 },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "100 * sum(pg_stat_database_numbackends{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}) / clamp_min(max(pg_settings_max_connections{project=\"eurecachat\", environment=\"$environment\"}), 1)", "legendFormat": "ocupação", "refId": "A" }],
+      "title": "Uso das conexões",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 1 }, { "color": "red", "value": 5 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 5, "w": 5, "x": 9, "y": 32 },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "max(pg_long_running_transactions{project=\"eurecachat\", environment=\"$environment\"}) or vector(0)", "legendFormat": "transações", "refId": "A" }],
+      "title": "Transações longas",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 1 }] }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 5, "w": 5, "x": 14, "y": 32 },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "sum(increase(pg_stat_database_deadlocks{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}[1h])) or vector(0)", "legendFormat": "deadlocks", "refId": "A" }],
+      "title": "Deadlocks na última hora",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "max": 100, "min": 0, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 90 }, { "color": "green", "value": 97 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 5, "w": 5, "x": 19, "y": 32 },
+      "options": { "colorMode": "value", "graphMode": "area", "justifyMode": "auto", "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "textMode": "auto" },
+      "targets": [{ "expr": "100 * sum(pg_stat_database_blks_hit{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}) / clamp_min(sum(pg_stat_database_blks_hit{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}) + sum(pg_stat_database_blks_read{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}), 1)", "legendFormat": "cache hit", "refId": "A" }],
+      "title": "Taxa de acerto do cache",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "unit": "ops" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 37 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi" } },
+      "targets": [
+        { "expr": "sum by (datname) (rate(pg_stat_database_xact_commit{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}[5m]))", "legendFormat": "{{datname}} commits", "refId": "A" },
+        { "expr": "sum by (datname) (rate(pg_stat_database_xact_rollback{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}[5m]))", "legendFormat": "{{datname}} rollbacks", "refId": "B" }
+      ],
+      "title": "Transações por segundo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 37 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi" } },
+      "targets": [{ "expr": "sum by (datname, mode) (pg_locks_count{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"})", "legendFormat": "{{datname}} · {{mode}}", "refId": "A" }],
+      "title": "Locks por modo",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "bytes" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 44 },
+      "options": { "displayMode": "gradient", "legend": { "calcs": ["lastNotNull"], "displayMode": "list", "placement": "bottom", "showLegend": true }, "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showUnfilled": true, "sizing": "auto", "valueMode": "color" },
+      "targets": [{ "expr": "pg_database_size_bytes{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}", "legendFormat": "{{datname}}", "refId": "A" }],
+      "title": "Tamanho dos bancos",
+      "type": "bargauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "drawStyle": "line", "fillOpacity": 12, "lineWidth": 2, "showPoints": "never" }, "unit": "short" }, "overrides": [] },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 44 },
+      "options": { "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "multi" } },
+      "targets": [{ "expr": "sum by (datname, state) (pg_stat_activity_count{project=\"eurecachat\", environment=\"$environment\", datname=~\"$database\"}) > 0", "legendFormat": "{{datname}} · {{state}}", "refId": "A" }],
+      "title": "Conexões por estado",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "tags": ["eurecachat", "infraestrutura", "observability", "postgresql"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": true, "text": "local", "value": "local" },
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "definition": "label_values(up{project=\"eurecachat\"}, environment)",
+        "includeAll": false,
+        "label": "Ambiente",
+        "name": "environment",
+        "options": [],
+        "query": { "query": "label_values(up{project=\"eurecachat\"}, environment)", "refId": "PrometheusVariableQueryEditor-VariableQuery" },
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": { "selected": true, "text": "Todos", "value": "$__all" },
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "definition": "label_values(pg_database_size_bytes{project=\"eurecachat\", environment=\"$environment\", datname!~\"template.*\"}, datname)",
+        "description": "Banco PostgreSQL exibido nos painéis desta seção.",
+        "includeAll": true,
+        "label": "Banco",
+        "multi": true,
+        "name": "database",
+        "options": [],
+        "query": { "query": "label_values(pg_database_size_bytes{project=\"eurecachat\", environment=\"$environment\", datname!~\"template.*\"}, datname)", "refId": "PrometheusVariableQueryEditor-VariableQuery" },
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": { "selected": true, "text": "Todos", "value": "$__all" },
+        "description": "Container Docker cujos logs serão exibidos.",
+        "includeAll": true,
+        "label": "Container",
+        "multi": true,
+        "name": "container",
+        "options": [],
+        "query": "eureca_backend,eureca_postgres,phoenix,eureca_alloy",
+        "type": "custom"
+      },
+      {
+        "allValue": ".*",
+        "current": { "selected": true, "text": "Todos", "value": "$__all" },
+        "description": "Nível estruturado dos logs; serviços sem nível aparecem em Todos.",
+        "includeAll": true,
+        "label": "Nível",
+        "multi": true,
+        "name": "level",
+        "options": [],
+        "query": "INFO,WARNING,ERROR,CRITICAL",
+        "type": "custom"
+      },
+      {
+        "current": { "selected": true, "text": "", "value": "" },
+        "description": "Expressão de busca livre nos textos dos logs.",
+        "label": "Buscar",
+        "name": "search",
+        "options": [{ "selected": true, "text": "", "value": "" }],
+        "query": "",
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "EurecaChat — Infraestrutura",
+  "uid": "eurecachat-infraestrutura",
+  "version": 3,
+  "weekStart": ""
+}

@@ -1,0 +1,129 @@
+{
+  "Estagio": {
+    "matricula_do_estudante": {
+      "type": "TEXT",
+      "description": "Código da matrícula do estudante.",
+      "mapper": "matricula_do_estudante"
+    },
+    "uf_concedente": {
+      "type": "TEXT",
+      "description": "Unidade federativa (sigla) onde a empresa está localizada.",
+      "mapper": "uf_concedente"
+    },
+    "matricula_do_docente": {
+      "type": "INTEGER",
+      "description": "Matrícula do professor orientador de estágio do estudante.",
+      "mapper": "matricula_do_docente"
+    },
+    "departamento": {
+      "type": "TEXT",
+      "description": "Nome do departamento da empresa.",
+      "mapper": "departamento"
+    },
+    "nome_docente": {
+      "type": "TEXT",
+      "description": "Nome do professor orientador do estudante.",
+      "mapper": "nome_docente"
+    },
+    "obrigatorio": {
+      "type": "INTEGER",
+      "description": "Usar 1 caso seja verdadeiro e 0 para falso.",
+      "mapper": "obrigatorio"
+    },
+    "inicio_vigencia": {
+      "type": "DATE",
+      "description": "Data de início do estágio em formato YYYY-MM-DD.",
+      "mapper": "inicio_vigencia"
+    },
+    "final_vigencia": {
+      "type": "DATE",
+      "description": "Data de término do estágio em formato YYYY-MM-DD.",
+      "mapper": "final_vigencia"
+    },
+    "carga_semanal": {
+      "type": "INTEGER",
+      "description": "Número de horas trabalhadas por semana.",
+      "mapper": "carga_semanal"
+    },
+    "status": {
+      "type": "TEXT",
+      "description": "'RESCINDIDO', 'ATIVO', 'PENDENTE', 'CONCLUIDO', 'CANCELADO'",
+      "mapper": "status"
+    },
+    "agente_integracao": {
+      "type": "TEXT",
+      "description": "",
+      "mapper": "agente_integracao"
+    },
+    "bolsa_mensal": {
+      "type": "REAL",
+      "description": "Valor da bolsa recebida pelo estudante.",
+      "mapper": "bolsa_mensal"
+    },
+    "auxilio_transporte_diario": {
+      "type": "REAL",
+      "description": "Valor do auxílio transporte recebido.",
+      "mapper": "auxilio_transporte_diario"
+    },
+    "cidade_concedente": {
+      "type": "TEXT",
+      "description": "Nome da cidade onde o estágio está acontecendo.",
+      "mapper": "cidade_concedente"
+    },
+    "cnpj": {
+      "type": "TEXT",
+      "description": "CNPJ da empresa onde o estágio está sendo feito.",
+      "mapper": "cnpj"
+    },
+    "razao_social": {
+      "type": "TEXT",
+      "description": "Razão social da empresa onde está sendo feito o estágio.",
+      "mapper": "razao_social"
+    },
+    "orgao_administracao_publica": {
+      "type": "TEXT",
+      "description": "",
+      "mapper": "orgao_administracao_publica"
+    },
+    "codigo_do_curso": {
+      "type": "INTEGER",
+      "description": "Código do curso do estudante.",
+      "mapper": "codigo_do_curso"
+    },
+    "nome_do_curso": {
+      "type": "TEXT",
+      "description": "Nome do curso do estudante.",
+      "mapper": "nome_do_curso"
+    },
+    "campus": {
+      "type": "INTEGER",
+      "description": "Número do campus do estudante.",
+      "mapper": "campus"
+    },
+    "nome_do_campus": {
+      "type": "TEXT",
+      "description": "Nome do campus. Pode ser 'Campina Grande', 'Cajazeiras', 'Sousa', 'Patos', 'Cuité', 'Sumé' ou 'Pombal'.",
+      "mapper": "nome_do_campus"
+    },
+    "sexo": {
+      "type": "TEXT",
+      "description": "Sexo do estudante. ENUM 'FEMININO' ou 'MASCULINO';",
+      "mapper": "sexo"
+    },
+    "cor": {
+      "type": "TEXT",
+      "description": "Cor de pele do estudante, pode ser 'pardo', 'não informado', 'indígeno', 'remanescente de quilombo', 'amarelo (de origem oriental)', 'negro' ou 'branco'. Só use esse atributo se na pergunta de fato especificar sobre a cor do estudante.",
+      "mapper": "cor"
+    },
+    "idade": {
+      "type": "INTEGER",
+      "description": "Idade do estudante;",
+      "mapper": "idade"
+    },
+    "mc": {
+      "type": "REAL",
+      "description": "MC (Média de conclusão do estudante).",
+      "mapper": "mc"
+    }
+  }
+}

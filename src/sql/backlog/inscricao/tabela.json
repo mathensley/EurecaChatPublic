@@ -1,0 +1,60 @@
+{
+    "nome_da_tabela": "inscricao",
+    "dados": {
+        "id_inscricao": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "id_inscricao"
+        },
+        "codigo_da_disciplina": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_da_disciplina"
+        },
+        "nome_da_disciplina": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_da_disciplina"
+        },
+        "matricula_do_estudante": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "matricula_do_estudante"
+        },
+        "tipo": {
+            "type": "TEXT",
+            "description": "'OBRIGATORIA' ou 'OPTATIVA'.",
+            "mapper": "tipo_de_disciplina"
+        },
+        "periodo": {
+            "type": "TEXT",
+            "description": "Período em que a disciplina foi ministrada.",
+            "mapper": "periodo"
+        },
+        "turma": {
+            "type": "INTEGER",
+            "description": "Número da turma. É um valor entre 1 e 10 (No máximo 10).",
+            "mapper": "turma"
+        },
+        "status": {
+            "type": "TEXT",
+            "description": "'Reprovado', 'Reprovado Por Média E Por Faltas', 'Cancelado' (cancelou a matrícula na disciplina), 'Trancado', 'Aprovado', 'Aprovado por Nota', 'Transferido', 'Indeferido' (não conseguiu vagas na disciplina), 'Desistencia' ou 'Em Curso' (para quando está cursando a disciplina atualmente). E quando a pergunta envolver reprovação em geral sem especificar se foi por nota ou por falta use: 'Reprovado' OR 'Reprovado Por Média E Por Faltas'.",
+            "mapper": "status"
+        },
+        "media_final": {
+            "type": "REAL",
+            "description": "Nota final na disciplina.",
+            "mapper": "nota_na_disciplina"
+        },
+        "dispensas": {
+            "type": "TEXT",
+            "description": "'Sim' ou 'Não'. Indica se o estudante dispensou a disciplina.",
+            "mapper": "dispensas"
+        },
+        "matricula_do_professor": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "matricula_do_professor"
+        }
+    }
+}

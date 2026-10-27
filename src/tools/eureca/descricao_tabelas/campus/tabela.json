@@ -1,0 +1,15 @@
+{
+    "nome_da_tabela": "campus",
+    "dados": {
+        "codigo_do_campus": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_campus"      
+        },
+        "nome_do_campus": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "nome_do_campus"      
+        }
+    }
+}

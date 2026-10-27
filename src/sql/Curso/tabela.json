@@ -1,0 +1,79 @@
+{
+    "Curso": {
+        "codigo_do_curso": {
+            "type": "INTEGER",
+            "description": "Código do curso. Geralmente esse campo é usado para identificar o curso de forma única. Se o usuário perguntar sobre esse campo sem informar o código do curso, então selecione esse campo mas não aplique filtro nele pois você não sabe o código exato e selecione junto ao atributo 'nome_do_curso' para evitar erros. Se souber o código do curso, use esse campo.",
+            "mapper": "codigo_do_curso"
+        },
+        "descricao": {
+            "type": "TEXT",
+            "description": "é o nome do curso. Sempre selecione o atributo 'nome_do_curso' na consulta quando você souber o nome do curso, pois pode ser que não ache e é melhor evitar erros mesmo quando o nome do curso é conhecido. Se não souber o nome do curso, pode deixar de fora.",
+            "mapper": "nome_do_curso"
+        },
+        "status": {
+            "type": "TEXT",
+            "description": "Status do curso. Pode ser 'ATIVO' ou 'INATIVO'. Se o usuário perguntar sobre esse campo sem informar o status, então selecione esse campo mas não aplique filtro nele pois você não sabe o status exato.",
+            "mapper": "status"
+        },
+        "grau_do_curso": {
+            "type": "TEXT",
+            "description": "Grau do curso sempre é 'GRADUACAO'. Se o usuário perguntar sobre esse campo sem informar o grau, então selecione esse campo mas não aplique filtro nele pois você não sabe o grau exato.",
+            "mapper": "grau_do_curso"
+        },
+        "codigo_do_setor": {
+            "type": "INTEGER",
+            "description": "Codigo do setor. Geralmente esse campos não é muito usado, mas se o usuário perguntar sobre esse campo sem informar o código do setor, então selecione esse campo mas não aplique filtro nele pois você não sabe o código exato e selecione o nome_do_setor junto ao nome_do_setor para evitar erros. Se souber o código do setor, use esse campo.",
+            "mapper": "codigo_do_setor"
+        },
+        "nome_do_setor": {
+            "type": "TEXT",
+            "description": "Nome do centro que oferta tais cursos, NÃO confundir com: nome do campus ou nome do curso ou nome da instituição (e.g. ufcg). Podem ser: 'CH - CENTRO DE HUMANIDADES', 'CCT - CENTRO DE CIENCIAS E TECNOLOGIA', 'CEEI - CENTRO DE ENG. ELETRICA E INFORMATICA', 'CTRN - CENTRO DE TECNOLOGIA E RECURSOS NATURAIS', 'CCJS - CENTRO DE CIENCIAS JURIDICAS E SOCIAIS', 'CES - CENTRO DE EDUCACAO E SAUDE - CUITE', 'CSTR - CENTRO DE SAUDE E TECNOLOGIA RURAL', 'CFP - CENTRO DE FORMACAO DE PROFESSORES', 'CDSA - CENTRO DE DESENVOLVIMENTO DO SEMI-ARIDO' e 'CCTA - CENTRO DE CIENCIAS TEC. AGROALIMENTAR'",
+            "mapper": "nome_centro"
+        },
+        "campus": {
+            "type": "INTEGER",
+            "description": "Código do campus. Campina Grande tem código 1, Cajazeiras tem código 2, Sousa tem código 3, Patos tem código 4, Cuité tem código 5 e Sumé tem código 7 e Pombal tem código 9. Se o usuário perguntar sobre esse campo sem informar o código do campus, então selecione esse campo mas não aplique filtro nele pois você não sabe o código exato e selecione junto ao atributo 'nome_do_campus' para evitar erros. Se souber o código do campus, use esse campo.",
+            "mapper": "codigo_do_campus"
+        },
+        "nome_do_campus": {
+            "type": "TEXT",
+            "description": "Nome do campus. Decida se deve ou não ser usado. Pode ser 'Campina Grande', 'Cajazeiras', 'Sousa', 'Patos', 'Cuité', 'Sumé' ou 'Pombal'.",
+            "mapper": "nome_do_campus"
+        },
+        "turno": {
+            "type": "TEXT",
+            "description": "Turno do curso. Pode ser 'Integral', 'Noturno' e 'Matutino'. Se o usuário perguntar sobre esse campo sem informar o turno, então selecione esse campo mas não aplique filtro nele pois você não sabe o turno exato.",
+            "mapper": "turno"
+        },
+        "periodo_de_inicio": {
+            "type": "TEXT",
+            "description": "Periodo de inicio do curso. Ele sempre será n seguinte formato: 'ano.semestre'. Exemplo: '2023.1' ou '2023.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+            "mapper": "periodo_de_inicio"
+        },
+        "codigo_inep": {
+            "type": "INTEGER",
+            "description": "Codigo do INEP. Usar apenas quando for pedido e souber o código. Se o usuário perguntar sobre esse campo sem informar o código, então selecione esse campo mas não aplique filtro nele pois você não sabe o código exato.",
+            "mapper": "codigo_inep"
+        },
+        "data_de_funcionamento": {
+            "type": "DATE",
+            "description": "Data de criação do curso. Usar apenas quando for pedido e souber a data. Se o usuário perguntar sobre esse campo sem informar a data, então selecione esse campo mas não aplique filtro nele pois você não sabe a data exata.",
+            "mapper": "data_de_funcionamento"
+        },
+        "modalidade_academica": {
+            "type": "TEXT",
+            "description": "Modalidade acadêmica do curso cuja opções são 'BACHARELADO' e 'LICENCIATURA'. Se o usuário perguntar sobre esse campo sem informar a modalidade, então selecione esse campo mas não aplique filtro nele pois você não sabe a modalidade exata.",
+            "mapper": "modalidade_academica"
+        },
+        "curriculo_atual": {
+            "type": "INTEGER",
+            "description": "É o ano em que a grade do curso foi renovada",
+            "mapper": "curriculo_atual"
+        },
+        "ciclo_enade": {
+            "type": "INTEGER",
+            "description": "De quantos em quantos semestres ocorre a prova do enade. Se o usuário perguntar sobre esse campo sem informar o ciclo, então selecione esse campo mas não aplique filtro nele pois você não sabe o ciclo exato.",
+            "mapper": "ciclo_enade"
+        }
+    }
+}

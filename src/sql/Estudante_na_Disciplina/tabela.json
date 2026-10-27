@@ -1,0 +1,189 @@
+{
+    "Estudante_na_Disciplina": {
+        "matricula_do_estudante": {
+            "type": "TEXT",
+            "description": "Código da matrícula do estudante (um estudante pode ter a mesma matrícula para várias disciplinas).",
+            "mapper": "matricula_do_estudante"
+        },
+        "codigo_do_curso": {
+            "type": "INTEGER",
+            "description": "Código do curso.",
+            "mapper": "codigo_do_curso"
+        },
+        "nome_do_curso": {
+            "type": "TEXT",
+            "description": "Nome do curso.",
+            "mapper": "nome_do_curso"
+        },
+        "codigo_do_setor": {
+            "type": "INTEGER",
+            "description": "Código do centro responsável pelos cursos;",
+            "mapper": "codigo_do_setor"
+        },
+        "nome_do_setor": {
+            "type": "TEXT",
+            "description": "Nome do centro responsável pelos cursos. Podem ser: 'CH - CENTRO DE HUMANIDADES', 'CCT - CENTRO DE CIENCIAS E TECNOLOGIA', 'CEEI - CENTRO DE ENG. ELETRICA E INFORMATICA', 'CTRN - CENTRO DE TECNOLOGIA E RECURSOS NATURAIS', 'CCJS - CENTRO DE CIENCIAS JURIDICAS E SOCIAIS', 'CES - CENTRO DE EDUCACAO E SAUDE - CUITE', 'CSTR - CENTRO DE SAUDE E TECNOLOGIA RURAL', 'CFP - CENTRO DE FORMACAO DE PROFESSORES', 'CDSA - CENTRO DE DESENVOLVIMENTO DO SEMI-ARIDO' e 'CCTA - CENTRO DE CIENCIAS TEC. AGROALIMENTAR'",
+            "mapper": "nome_do_setor"
+        },
+        "codigo_do_curriculo": {
+            "type": "INTEGER",
+            "description": "Curriculo do curso. Ano do curriculo do curso do estudante.",
+            "mapper": "codigo_do_curriculo"
+        },
+        "campus": {
+            "type": "INTEGER",
+            "description": "Número do campus",
+            "mapper": "codigo_do_campus"
+        },
+        "nome_do_campus": {
+            "type": "TEXT",
+            "description": "Nome do campus. Pode ser 'Campina Grande', 'Cajazeiras', 'Sousa', 'Patos', 'Cuité', 'Sumé' ou 'Pombal'.",
+            "mapper": "nome_do_campus"
+        },
+        "estado_civil": {
+            "type": "TEXT",
+            "description": "Estado cívil do estudante. Pode ser 'solteiro(a)', 'casado(a)', 'separado judicialmente', 'viúvo(a)', 'divorciado(a)', 'não informado' ou 'outro'.",
+            "mapper": "estado_civil"
+        },
+        "sexo": {
+            "type": "TEXT",
+            "description": "Sexo do estudante. ENUM 'f' ou 'm';",
+            "mapper": "sexo"
+        },
+        "idade": {
+            "type": "INTEGER",
+            "description": "Idade do estudante;",
+            "mapper": "idade"
+        },
+        "situacao": {
+            "type": "TEXT",
+            "description": "Situação do estudante pode ser 'não cadastrado', 'cancelado', 'desconhecido', 'ativo', 'concluído', 'trancado', 'cadastrado', 'ativo - formando', 'formado';",
+            "mapper": "situacao"
+        },
+        "motivo_de_evasao": {
+            "type": "TEXT",
+            "description": "Nunca use esse atributo, pois ele não contém dados.", 
+            "mapper": "motivo_que_saiu_do_curso"
+        },
+        "periodo_de_evasao": {
+            "type": "TEXT",
+            "description": "Período que o estudante saiu da universidade. Ele sempre será no seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+            "mapper": "periodo_de_evasao"
+        },
+        "periodo_de_ingresso": {
+            "type": "TEXT",
+            "description": "Período que o estudante entrou na universidade pela primeira vez. Ele sempre será n seguinte formato: 'ano.semestre'. Exemplo: '2020.1' ou '2019.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+            "mapper": "periodo_de_ingresso"
+        },
+        "nacionalidade": {
+            "type": "TEXT",
+            "description": "Nacionalidade do estudante, o ENUM pode ser 'Brasileira' ou 'Estrangeira'. Só use esse atributo se na pergunta de fato especificar sobre a nacionalidade do estundante.",
+            "mapper": "nacionalidade"
+        },
+        "local_de_nascimento": {
+            "type": "TEXT",
+            "description": "Cidade de local de nascimento do estudante. Só use esse atributo se na pergunta de fato especificar sobre o local de nascimento;",
+            "mapper": "local_de_nascimento"
+        },
+        "naturalidade": {
+            "type": "TEXT",
+            "description": "Nome do estado de local de nascimento do estudante. Só use esse atributo se na pergunta de fato especificar sobre o local de nascimento. Por exemplo, 'Paraíba', 'Acre', ...",
+            "mapper": "estado_unidade_federativa"
+        },
+        "cor": {
+            "type": "TEXT",
+            "description": "Cor de pele do estudante, pode ser 'pardo', 'não informado', 'indígeno', 'remanescente de quilombo', 'amarelo (de origem oriental)', 'negro' ou 'branco'. Só use esse atributo se na pergunta de fato especificar sobre a cor do estudante.",
+            "mapper": "cor"
+        },
+        "deficiencias": {
+            "type": "TEXT",
+            "description": "Tipo de deficiência do estudante. Se usar esse atributo faça agrupamento se achar necessário. Pode ser 'deficiência intelectual', 'síndrome de asperger', 'deficiência visual - baixa visão', 'transtorno do déficit de atenção/hiperatividad...', 'surdez', 'não informado', 'deficiência física', 'transtorno do espectro autista', 'deficiência auditiva','deficiência visual - cegueira', 'outras necessidades', 'dislexia, disortografia, disgrafia ou discalculia', 'síndrome de rett' ou 'transtorno desintegrativo da infância'. Só use se for perguntado uma deficiencia específica, se for geral não use;",
+            "mapper": "deficiencias"
+        },
+        "ano_de_conclusao_ensino_medio": {
+            "type": "INTEGER",
+            "description": "Ano de conclusão do ensino médio do estudante.",
+            "mapper": "ano_de_conclusao_ensino_medio"
+        },
+        "tipo_de_ensino_medio": {
+            "type": "TEXT",
+            "description": "Tipo de ensino médio do estudante. ENUM que pode ser 'não informado', 'pública' ou 'privada';",
+            "mapper": "tipo_de_ensino_medio"
+        },
+        "periodos_completados": {
+            "type": "REAL",
+            "description": "Períodos que o estudante já completou até então, se quiser saber o período atual use o valor retornado mais um;",
+            "mapper": "periodos_completados"
+        },
+        "renda_per_capita_ate": {
+            "type": "REAL",
+            "description": "Quantia numérica de salários mínimos, um salário mínimo é de 1530;",
+            "mapper": "renda_per_capita_ate"
+        },
+        "mc": {
+            "type": "REAL",
+            "description": "MC (Média de conclusão do estudante). Informa o quão perto está de terminar o curso.",
+            "mapper": "media_de_conclusao"
+        },
+        "tem_deficiencia": {
+            "type": "TEXT",
+            "description": "ENUM 'sim' ou 'nao' se o estudante tem deficiencia;",
+            "mapper": "tem_deficiencia"
+        },
+        "cotista": {
+            "type": "TEXT",
+            "description": "ENUM 'sim' ou 'nao' se o estudante entrou usando cotas;",
+            "mapper": "cotista"
+        },
+        "codigo_da_disciplina": {
+            "type": "INTEGER",
+            "description": "Código da disciplina. Ignore esse campo, ele não é útil.",
+            "mapper": "codigo_da_disciplina"
+        },
+        "nome_da_disciplina": {
+            "type": "TEXT",
+            "description": "Nome da disciplina",
+            "mapper": "nome_da_disciplina"
+        },
+        "periodo": {
+            "type": "TEXT",
+            "description": "Período em que a disciplina está sendo ministrada, só pode ser no estilo 'AAAA.s' (ex: 2026.1).",
+            "mapper": "periodo"
+        },
+        "turma": {
+            "type": "INTEGER",
+            "description": "Número da turma. É um valor entre 1 e 10 (No máximo 10).",
+            "mapper": "turma"
+        },
+        "status": {
+            "type": "TEXT",
+            "description": "ENUM pode ser: 'Reprovado', 'Reprovado Por Média e Por Faltas', 'Cancelado' (cancelou a matrícula na disciplina), 'Trancado', 'Aprovado', 'Aprovado por Nota',  'Transferido', 'Indeferido' (não conseguiu vagas na disciplina), 'Desistencia' ou 'Em Curso' (para quando está cursando a disciplina atualmente). E quando a pergunta envolver reprovação em geral sem especificar se foi por nota ou por falta use: 'Reprovado' OR 'Reprovado Por Média e Por Faltas'",
+            "mapper": "status"
+        },
+        "media_final": {
+            "type": "REAL",
+            "description": "Nota final do estudante na disciplina",
+            "mapper": "nota_na_disciplina"
+        },
+        "dispensas": {
+            "type": "TEXT",
+            "description": "ENUM pode ser 'Sim' ou 'Não'. Indica se o estudante dispensou a disciplina",
+            "mapper": "dispensas"
+        },
+        "nome_do_professor": {
+            "type": "TEXT",
+            "description": "Nome do professor docente que leciona a disciplina. Usar o operador %LIKE% e todas as letras caica alta em maiusculo e sem acentos",
+            "mapper": "nome_do_professor"
+        },
+        "matricula_do_docente": {
+            "type": "INTEGER",
+            "description": "Matrícula do professor docente que leciona a disciplina",
+            "mapper": "matricula_do_docente"
+        },
+        "siape": {
+            "type": "INTEGER",
+            "description": "SIAPE do professor docente que leciona a disciplina",
+            "mapper": "matricula_siape_do_professor"
+        }
+    }
+}

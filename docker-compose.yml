@@ -1,0 +1,185 @@
+services:
+  backend:
+    build:
+      context: .
+      args:
+        APP_VERSION: ${CI_COMMIT_SHA:-local}
+    container_name: eureca_backend
+    restart: always
+    env_file:
+      - .env
+    environment:
+      # API KEYS
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DEEPINFRA_API_TOKEN: ${DEEPINFRA_API_TOKEN}
+      TAVILY_API_KEY: ${TAVILY_API_KEY}
+      GOOGLE_SERVICE_ACCOUNT_JSON_B64: ${GOOGLE_SERVICE_ACCOUNT_JSON_B64:-}
+      # DB
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      # LOGGER
+      DOCKER_ENV: ${DOCKER_ENV}
+      # MODELS
+      PROVIDER_URL: ${PROVIDER_URL:-}
+      AGENT_MODEL: ${AGENT_MODEL}
+      CHECK_MSG_MODEL: ${CHECK_MSG_MODEL}
+      SUMMARIZER_MODEL: ${SUMMARIZER_MODEL}
+      TOOL_SELECTOR_MODEL: ${TOOL_SELECTOR_MODEL}
+      CHAT_TITLE_MODEL: ${CHAT_TITLE_MODEL}
+      SQL_MODEL: ${SQL_MODEL}
+      # TRACING PHOENIX
+      ENABLE_TRACING: ${ENABLE_TRACING}
+      PHOENIX_COLLECTOR_ENDPOINT: ${PHOENIX_COLLECTOR_ENDPOINT}
+      PHOENIX_PROJECT_NAME: ${PHOENIX_PROJECT_NAME}
+      PHOENIX_ENDPOINT: ${PHOENIX_ENDPOINT:-http://phoenix:6006}
+      PHOENIX_API_KEY: ${PHOENIX_API_KEY}
+      # RATE LIMITING
+      DAILY_TOKEN_LIMIT_USER: ${DAILY_TOKEN_LIMIT_USER}
+      DAILY_TOKEN_LIMIT_ANON: ${DAILY_TOKEN_LIMIT_ANON}
+      APP_ORIGIN: ${APP_ORIGIN:-*}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      ENABLE_GRAFANA_OBSERVABILITY: ${ENABLE_GRAFANA_OBSERVABILITY:-false}
+      MSB_HOME: /EurecaAI/microsandbox
+    ports:
+      - "8000:8000"
+    expose:
+      # Endpoint Prometheus acessível apenas pela rede interna do Compose.
+      - "9464"
+    devices:
+      - /dev/kvm:/dev/kvm
+    depends_on:
+      postgres:
+        condition: service_healthy
+      phoenix:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/ready', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    volumes:
+      - eureca_sqlite_data:/EurecaAI/sqlite
+      - backend_logs:/var/log/eureca
+      - eureca_workdirs:/EurecaAI/src/workdirs
+      - eureca_microsandbox:/EurecaAI/microsandbox
+      
+  postgres:
+    image: postgres:15
+    container_name: ${CONTAINER_NAME}
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5442:5432"
+    volumes:
+      - eureca_pgdata:/var/lib/postgresql/data
+      - ./application/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./application/db/init-phoenix.sql:/docker-entrypoint-initdb.d/init-phoenix.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: phoenix
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      PHOENIX_SQL_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/phoenix
+      PHOENIX_ENABLE_AUTH: "true"
+      PHOENIX_SECRET: ${PHOENIX_SECRET}
+      PHOENIX_DEFAULT_ADMIN_INITIAL_PASSWORD: ${PHOENIX_DEFAULT_ADMIN_INITIAL_PASSWORD}
+      PHOENIX_ENABLE_STRONG_PASSWORD_POLICY: "true"
+      PHOENIX_USE_SECURE_COOKIES: "true"
+      # Expõe apenas na rede interna do Compose; o Alloy faz o scrape.
+      PHOENIX_ENABLE_PROMETHEUS: "true"
+    ports:
+      - "6006:6006"
+    expose:
+      - "9090"
+    volumes:
+      - phoenix_data:/mnt/data
+
+  postgres_monitor_setup:
+    image: postgres:15
+    container_name: eureca_postgres_monitor_setup
+    profiles: ["observability"]
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB}
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_APPLICATION_USER: ${POSTGRES_USER}
+      POSTGRES_MONITOR_DATABASE: ${POSTGRES_DB}
+      POSTGRES_MONITOR_PASSWORD: ${POSTGRES_MONITOR_PASSWORD:-}
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        test -n "$$POSTGRES_MONITOR_PASSWORD" || {
+          echo "POSTGRES_MONITOR_PASSWORD não foi definida."
+          exit 1
+        }
+        psql \
+          --set=ON_ERROR_STOP=1 \
+          --set=application_user="$$POSTGRES_APPLICATION_USER" \
+          --set=monitor_database="$$POSTGRES_MONITOR_DATABASE" \
+          --set=monitor_password="$$POSTGRES_MONITOR_PASSWORD" \
+          --file=/observability/setup-monitor.sql
+    volumes:
+      - ./observability/postgres/setup-monitor.sql:/observability/setup-monitor.sql:ro
+
+  alloy:
+    image: grafana/alloy:v1.19.2
+    container_name: eureca_alloy
+    profiles: ["observability"]
+    restart: always
+    depends_on:
+      postgres_monitor_setup:
+        condition: service_completed_successfully
+      phoenix:
+        condition: service_started
+    environment:
+      GRAFANA_CLOUD_METRICS_URL: ${GRAFANA_CLOUD_METRICS_URL}
+      GRAFANA_CLOUD_METRICS_USERNAME: ${GRAFANA_CLOUD_METRICS_USERNAME}
+      GRAFANA_CLOUD_LOKI_URL: ${GRAFANA_CLOUD_LOKI_URL}
+      GRAFANA_CLOUD_LOKI_USERNAME: ${GRAFANA_CLOUD_LOKI_USERNAME}
+      GRAFANA_CLOUD_API_KEY: ${GRAFANA_CLOUD_API_KEY}
+      OBSERVABILITY_ENVIRONMENT: ${OBSERVABILITY_ENVIRONMENT:-production}
+      OBSERVABILITY_INSTANCE: ${OBSERVABILITY_INSTANCE:-eureca-vm}
+      POSTGRES_MONITOR_HOST: postgres
+      POSTGRES_MONITOR_PORT: 5432
+      POSTGRES_MONITOR_DATABASE: ${POSTGRES_DB}
+      POSTGRES_MONITOR_PASSWORD: ${POSTGRES_MONITOR_PASSWORD:-}
+    command:
+      - run
+      - --disable-reporting
+      - --storage.path=/var/lib/alloy/data
+      - /etc/alloy/config.alloy
+    volumes:
+      - ./observability/config.alloy:/etc/alloy/config.alloy:ro
+      - alloy_data:/var/lib/alloy/data
+      - backend_logs:/var/log/eureca:ro
+
+volumes:
+  eureca_pgdata:
+  eureca_sqlite_data:
+  phoenix_data:
+  alloy_data:
+  backend_logs:
+  eureca_workdirs:
+  eureca_microsandbox:

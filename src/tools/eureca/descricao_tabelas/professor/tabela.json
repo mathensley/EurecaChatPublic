@@ -1,0 +1,40 @@
+{
+    "nome_da_tabela": "professor",
+    "dados": {
+        "matricula_do_professor": {
+            "type": "INTEGER",
+            "description":  null,
+            "mapper": "matricula_do_professor"
+        },
+        "nome_do_professor": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_do_professor"
+        },
+        "siape": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "siape"
+        },
+        "sexo": {
+            "type": "INTEGER",
+            "description": "'MASCULINO' ou 'FEMININO'.",
+            "mapper": "sexo"
+        },
+        "codigo_da_unidade": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_da_unidade"
+        },
+        "status": {
+            "type": "TEXT",
+            "description": "'ATIVO', 'APOSENTADO', 'INSTITUIDOR', 'EXCLUSAO', 'SUSPENSO_PGTO', 'BEN_PENSAO', 'CEDIDO', 'EXTERNOS', 'RESIDENTES' e 'NAO_INFORMADO'.",
+            "mapper": "status"
+        },
+        "titulacao": {
+            "type": "TEXT",
+            "description": "'INFANTIL', 'MEDIO', 'TECNICO', 'BASICO', 'STRICTO_SENSU', 'DOUTORADO', 'MESTRADO', 'RESIDENCIA', 'FUNDAMENTAL', 'TECNICO_INTEGRADO', 'LATO_SENSU', 'FORMACAO_COMPLEMENTAR' e 'GRADUACAO'.",
+            "mapper": "status"     
+        }
+    }
+}

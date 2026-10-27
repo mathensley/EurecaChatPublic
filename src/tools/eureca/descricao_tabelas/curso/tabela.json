@@ -1,0 +1,125 @@
+{
+    "nome_da_tabela": "curso",
+    "dados": {
+        "codigo_do_curso": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_campus"
+        },
+        "nome_do_curso": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_do_curso"
+        },
+        "codigo_do_campus": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_campus"
+        },
+        "nome_do_campus": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_do_campus"
+        },
+        "codigo_do_centro": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_centro"
+        },
+        "nome_do_centro": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_do_centro"
+        },
+        "codigo_da_unidade": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_da_unidade"
+        },
+        "nome_da_unidade": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_da_unidade"
+        },
+        "turno": {
+            "type": "TEXT",
+            "description": "Turno do curso. Pode ser 'DIURNO', 'INTEGRAL', 'NOTURNO', 'MATUTINO' e 'VESPERTINO' . Se o usuário perguntar sobre esse campo sem informar o turno, então selecione esse campo mas não aplique filtro nele pois você não sabe o turno exato.",
+            "mapper": "turno"
+        },
+        "periodo_de_inicio": {
+            "type": "TEXT",
+            "description": "Periodo de inicio do curso. Ele sempre será n seguinte formato: 'ano.semestre'. Exemplo: '2023.1' ou '2023.2'. Usar apenas quando for pedido e souber o período. Se o usuário perguntar sobre esse campo sem informar o período, então selecione esse campo mas não aplique filtro nele pois você não sabe o período exato.",
+            "mapper": "periodo_de_inicio"
+        },
+        "codigo_inep": {
+            "type": "INTEGER",
+            "description": "Codigo do INEP. Usar apenas quando for pedido e souber o código. Se o usuário perguntar sobre esse campo sem informar o código, então selecione esse campo mas não aplique filtro nele pois você não sabe o código exato.",
+            "mapper": "codigo_inep"
+        },
+        "data_de_funcionamento": {
+            "type": "DATE",
+            "description": "Data de criação do curso. Usar apenas quando for pedido e souber a data. Se o usuário perguntar sobre esse campo sem informar a data, então selecione esse campo mas não aplique filtro nele pois você não sabe a data exata.",
+            "mapper": "data_de_funcionamento"
+        },
+        "modalidade_academica": {
+            "type": "TEXT",
+            "description": "Modalidade acadêmica do curso cuja opções são 'BACHARELADO', 'LICENCIATURA' E 'TECNOLÓGICO'. Se o usuário perguntar sobre esse campo sem informar a modalidade, então selecione esse campo mas não aplique filtro nele pois você não sabe a modalidade exata.",
+            "mapper": "modalidade_academica"
+        },
+        "curriculo_atual": {
+            "type": "INTEGER",
+            "description": "É o ano em que a grade do curso foi renovada.",
+            "mapper": "curriculo_atual"
+        },
+        "ciclo_enade": {
+            "type": "INTEGER",
+            "description": "De quantos em quantos semestres ocorre a prova do enade. Se o usuário perguntar sobre esse campo sem informar o ciclo, então selecione esse campo mas não aplique filtro nele pois você não sabe o ciclo exato.",
+            "mapper": "ciclo_enade"
+        },
+        "duracao_minima": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "duracao_minima"
+        },
+        "duracao_maxima": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "duracao_maxima"
+        },
+        "duracao_media": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "duracao_media"
+        },
+        "carga_horaria_disciplinas_obrigatorias_minima": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "carga_horaria_disciplinas_obrigatorias_minima"
+        },
+        "carga_horaria_disciplinas_optativas_minima": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "carga_horaria_disciplinas_optativas_minima"
+        },
+        "carga_horaria_atividades_complementares_minima": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "carga_horaria_atividades_complementares_minima"
+        },
+        "carga_horaria_minima_total": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "carga_horaria_minima_total"
+        },
+        "minimo_creditos_disciplinas_optativas": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "minimo_creditos_disciplinas_optativas"
+        },
+        "minimo_creditos_total": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "minimo_creditos_total"
+        }
+    }
+}

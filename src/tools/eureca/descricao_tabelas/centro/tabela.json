@@ -1,0 +1,30 @@
+{
+    "nome_da_tabela": "centro",
+    "dados": {
+        "codigo_do_centro": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_centro"
+        },
+        "nome_do_centro": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "nome_do_centro"
+        },
+        "codigo_do_campus": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "codigo_do_campus"      
+        },
+        "nome_do_campus": {
+            "type": "INTEGER",
+            "description": null,
+            "mapper": "nome_do_campus"      
+        },
+        "email_do_centro": {
+            "type": "TEXT",
+            "description": null,
+            "mapper": "email_do_centro"
+        }
+    }
+}

@@ -1,0 +1,143 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+// O Alloy envia métricas para o Prometheus gerenciado pelo Grafana Cloud.
+prometheus.remote_write "grafana_cloud" {
+  external_labels = {
+    environment = sys.env("OBSERVABILITY_ENVIRONMENT"),
+    instance    = sys.env("OBSERVABILITY_INSTANCE"),
+    project     = "eurecachat",
+  }
+
+  endpoint {
+    url = sys.env("GRAFANA_CLOUD_METRICS_URL")
+
+    basic_auth {
+      username = sys.env("GRAFANA_CLOUD_METRICS_USERNAME")
+      password = sys.env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}
+
+// Métricas técnicas e de fluxo do backend. A porta não é publicada no host.
+prometheus.scrape "backend" {
+  targets = [
+    {
+      "__address__" = "backend:9464",
+      "service"     = "backend",
+    },
+  ]
+
+  job_name        = "integrations/backend"
+  metrics_path    = "/metrics"
+  // Gauges de conexoes e chats sao instantaneos; 10s evita perder operacoes
+  // curtas sem aumentar a frequencia das coletas de PostgreSQL e Phoenix.
+  scrape_interval = "10s"
+  scrape_timeout  = "10s"
+  forward_to      = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+// Métricas técnicas do PostgreSQL. A senha é codificada antes de entrar na
+// URL para aceitar caracteres especiais e nunca é persistida na configuração.
+// O coletor stat_statements fica desativado para não exportar textos de queries.
+prometheus.exporter.postgres "eureca" {
+  data_source_names = [
+    "postgresql://eureca_monitor:" + encoding.url_encode(sys.env("POSTGRES_MONITOR_PASSWORD")) +
+    "@" + sys.env("POSTGRES_MONITOR_HOST") + ":" + sys.env("POSTGRES_MONITOR_PORT") +
+    "/" + sys.env("POSTGRES_MONITOR_DATABASE") + "?sslmode=disable",
+  ]
+
+  enabled_collectors = [
+    "database",
+    "locks",
+    "long_running_transactions",
+    "postmaster",
+    "replication",
+    "replication_slot",
+    "stat_bgwriter",
+    "stat_database",
+    "stat_progress_vacuum",
+    "stat_user_tables",
+    "statio_user_tables",
+    "wal",
+  ]
+}
+
+prometheus.scrape "postgres" {
+  targets         = prometheus.exporter.postgres.eureca.targets
+  job_name        = "integrations/postgres"
+  scrape_interval = "30s"
+  scrape_timeout  = "10s"
+  forward_to      = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+// O exporter do Phoenix fica acessível apenas pela rede interna do Compose.
+// Contém apenas métricas operacionais.
+prometheus.scrape "phoenix" {
+  targets = [
+    {
+      "__address__" = "phoenix:9090",
+      "service"     = "phoenix",
+    },
+  ]
+
+  job_name        = "integrations/phoenix"
+  metrics_path    = "/metrics"
+  scrape_interval = "30s"
+  scrape_timeout  = "10s"
+  forward_to      = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+// O backend grava o mesmo JSON enviado ao stdout em um volume dedicado. O
+// Alloy possui somente acesso de leitura a esse volume, sem Docker socket.
+loki.source.file "backend" {
+  targets = [
+    {
+      "__path__"   = "/var/log/eureca/backend.jsonl",
+      "environment" = sys.env("OBSERVABILITY_ENVIRONMENT"),
+      "instance"    = sys.env("OBSERVABILITY_INSTANCE"),
+      "project"     = "eurecachat",
+      "service"     = "backend",
+    },
+  ]
+
+  forward_to = [loki.process.backend.receiver]
+
+  file_match {
+    enabled     = true
+    sync_period = "5s"
+  }
+}
+
+// O conteúdo integral do JSON é preservado. Somente level e logger são
+// promovidos a labels, ambos com cardinalidade limitada.
+loki.process "backend" {
+  stage.json {
+    expressions = {
+      level  = "levelname",
+      logger = "name",
+    }
+  }
+
+  stage.labels {
+    values = {
+      level  = "",
+      logger = "",
+    }
+  }
+
+  forward_to = [loki.write.grafana_cloud.receiver]
+}
+
+loki.write "grafana_cloud" {
+  endpoint {
+    url = sys.env("GRAFANA_CLOUD_LOKI_URL")
+
+    basic_auth {
+      username = sys.env("GRAFANA_CLOUD_LOKI_USERNAME")
+      password = sys.env("GRAFANA_CLOUD_API_KEY")
+    }
+  }
+}

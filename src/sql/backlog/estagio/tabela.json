@@ -1,0 +1,70 @@
+{
+  "nome_da_tabela": "estagio",
+  "dados": {
+    "id_do_estagio": {
+      "type": "INTEGER",
+      "description": "ID do estágio.",
+      "mapper": "id_do_estagio"
+    },
+    "matricula_do_estudante": {
+      "type": "TEXT",
+      "description": null,
+      "mapper": "matricula_do_estudante"
+    },
+    "id_concedente": {
+      "type": "INTEGER",
+      "description": "ID da empresa.",
+      "mapper": "id_da_empresa"
+    },
+    "cidade_concedente": {
+      "type": "TEXT",
+      "description": "Nome da cidade onde o estágio está acontecendo.",
+      "mapper": "cidade_concedente"
+    },
+    "uf_concedente": {
+      "type": "TEXT",
+      "description": "Unidade federativa (sigla) onde a empresa está localizada.",
+      "mapper": "uf_concedente"
+    },
+    "matricula_do_docente": {
+      "type": "INTEGER",
+      "description": null,
+      "mapper": "matricula_do_docente"
+    },
+    "obrigatorio": {
+      "type": "INTEGER",
+      "description": "Usar 1 caso seja verdadeiro e 0 para falso.",
+      "mapper": "obrigatorio"
+    },
+    "data_inicio_estagio": {
+      "type": "DATE",
+      "description": "Em formato YYYY-MM-DD.",
+      "mapper": "data_inicio_estagio"
+    },
+    "data_final_estagio": {
+      "type": "DATE",
+      "description": "Em formato YYYY-MM-DD.",
+      "mapper": "data_final_estagio"
+    },
+    "carga_semanal": {
+      "type": "INTEGER",
+      "description": "Número de horas trabalhadas por semana.",
+      "mapper": "carga_semanal"
+    },
+    "status": {
+      "type": "TEXT",
+      "description": "'RESCINDIDO', 'ATIVO', 'PENDENTE', 'CONCLUIDO' ou 'CANCELADO'.",
+      "mapper": "status"
+    },
+    "bolsa_mensal": {
+      "type": "REAL",
+      "description": null,
+      "mapper": "bolsa_mensal"
+    },
+    "auxilio_transporte_diario": {
+      "type": "REAL",
+      "description": null,
+      "mapper": "auxilio_transporte_diario"
+    }
+  }
+}
